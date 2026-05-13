@@ -1,0 +1,14 @@
+{
+  "name": "ntv",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "api",
+    "client",
+    "shared"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev --workspace=api",
+    "dev:client": "npm run dev --workspace=client"
+  }
+}
