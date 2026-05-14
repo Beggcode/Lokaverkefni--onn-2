@@ -19,7 +19,18 @@ router.post("/register", async (req, res) => {
     expiresIn: "7d",
   });
 
-  res.status(201).json({ user, token });
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  res.status(201).json({ user });
+});
+
+router.post("/logout", (_req, res) => {
+  res.clearCookie("token");
+  res.json({ message: "logged out" });
 });
 
 router.post("/login", (_req, res) => {
