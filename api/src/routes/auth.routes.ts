@@ -3,11 +3,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
 import { authenticate, type AuthRequest } from "../middleware/auth.middleware.js";
+import { loginSchema, registerSchema } from "@ntv/shared";
 
 const router = Router();
 
 router.post("/register", async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, name } = registerSchema.parse(req.body);
   const hashed = await bcrypt.hash(password, 12);
   const user = await prisma.user.create({
     data: { email, password: hashed, name },
@@ -19,7 +20,7 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = loginSchema.parse(req.body);
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user || !(await bcrypt.compare(password, user.password))) {
     res.status(401).json({ error: "Invalid credentials" });
