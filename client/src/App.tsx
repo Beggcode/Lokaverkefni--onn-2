@@ -1,5 +1,9 @@
-function App() {
-  return <div>NTV</div>;
-}
+import Layout from "./Layout";
 
-export default App;
+export default function App() {
+	return (
+		<Layout>
+			<h2>App</h2>
+		</Layout>
+	);
+}

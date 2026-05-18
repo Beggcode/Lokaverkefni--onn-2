@@ -11,9 +11,12 @@
   },
   "dependencies": {
     "@ntv/shared": "^1.0.0",
+    "@tanstack/react-query": "^5.100.10",
+    "@tanstack/react-router": "^1.170.4",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "zustand": "^5.0.13"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
