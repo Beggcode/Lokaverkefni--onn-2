@@ -1,11 +1,11 @@
-import { Router } from "express";
+import { Router, type IRouter } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
 import { authenticate, type AuthRequest } from "../middleware/auth.middleware.js";
 import { loginSchema, registerSchema } from "@ntv/shared";
 
-const router = Router();
+const router: IRouter = Router();
 
 router.post("/register", async (req, res) => {
   const { email, password, name } = registerSchema.parse(req.body);
