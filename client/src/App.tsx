@@ -1,9 +1,10 @@
-import Layout from "./shared/components/Layout";
+import Layout from './shared/components/Layout'
+import Routes from './Routes'
 
 export default function App() {
-	return (
-		<Layout>
-			<h2>App</h2>
-		</Layout>
-	);
+  return (
+    <Layout>
+      <Routes />
+    </Layout>
+  )
 }
