@@ -3,9 +3,10 @@ import { rootRoute } from './router.root'
 import { Route as homeRoute } from './shared/pages/home.route'
 import { Route as loginRoute } from './features/auth/pages/login.route'
 import { Route as registerRoute } from './features/auth/pages/register.route'
+import { Route as productsRoute } from './features/products/pages/products.route'
 
 const router = createRouter({
-  routeTree: rootRoute.addChildren([homeRoute, loginRoute, registerRoute]),
+  routeTree: rootRoute.addChildren([homeRoute, loginRoute, registerRoute, productsRoute]),
 })
 
 declare module '@tanstack/react-router' {
