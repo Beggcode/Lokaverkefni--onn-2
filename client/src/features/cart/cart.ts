@@ -1,10 +1,9 @@
 import { cartSchema } from '@ntv/shared'
+import { apiFetchJson } from '../../shared/lib/apiFetch'
 
 export type { Cart, CartItem } from '@ntv/shared'
 
 export async function getCart() {
-  const res = await fetch('/api/cart', { credentials: 'include' })
-  const data = await res.json()
-  if (!res.ok) throw new Error(data.error ?? 'Failed to fetch cart')
+  const data = await apiFetchJson<{ cart: unknown }>('/api/cart')
   return cartSchema.parse(data.cart)
 }
