@@ -109,4 +109,46 @@ router.post("/items", async (req: AuthRequest, res) => {
 	res.json({ cart: updated });
 });
 
+// DELETE /api/cart/items/:itemId *_* remove an item from the user's cart
+router.delete("/items/:itemId", async (req: AuthRequest, res) => {
+	const itemId = Number(req.params.itemId);
+	if (isNaN(itemId)) {
+		res.status(400).json({ error: "Invalid item id" });
+		return;
+	}
+
+	const cart = await prisma.cart.findUnique({ where: { userId: req.userId } });
+	if (!cart) {
+		res.status(404).json({ error: "Cart not found" });
+		return;
+	}
+
+	const item = await prisma.cartItem.findFirst({
+		where: { id: itemId, cartId: cart.id },
+	});
+	if (!item) {
+		res.status(404).json({ error: "Item not found in cart" });
+		return;
+	}
+
+	await prisma.cartItem.delete({ where: { id: itemId } });
+
+	const updated = await prisma.cart.findUnique({
+		where: { id: cart.id },
+		include: {
+			items: {
+				include: {
+					variant: {
+						include: {
+							product: { include: { category: true, variants: true } },
+						},
+					},
+				},
+			},
+		},
+	});
+
+	res.json({ cart: updated });
+});
+
 export default router;
