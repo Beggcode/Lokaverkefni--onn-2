@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import { getProducts } from '../index'
 
 export default function Products() {
@@ -14,7 +15,10 @@ export default function Products() {
     <ul>
       {products.map((p) => (
         <li key={p.id}>
-          <strong>{p.name}</strong> — {p.category.name} — ${p.price}
+          <Link to="/products/$productId" params={{ productId: String(p.id) }}>
+            <strong>{p.name}</strong>
+          </Link>
+          {' '}— {p.category.name} — {p.price} kr
         </li>
       ))}
     </ul>
