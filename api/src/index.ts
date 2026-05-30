@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/products.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
+import orderRoutes from "./routes/orders.routes.js";
 import { env } from "./lib/env.js";
 
 const app = express();
@@ -20,6 +21,7 @@ app.get("/api", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.listen(env.PORT, () => {
   console.log(`Server running on port ${env.PORT}`);

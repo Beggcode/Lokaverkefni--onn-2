@@ -18,7 +18,7 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1)
 
   const add = useMutation({
-    mutationFn: () => addToCart(selectedVariant!.id, quantity),
+    mutationFn: () => addToCart((selectedVariant ?? product!.variants[0]).id, quantity),
     onSuccess: (updated) => queryClient.setQueryData(['cart'], updated),
   })
 

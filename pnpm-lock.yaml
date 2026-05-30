@@ -92,6 +92,9 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.170.4
         version: 1.170.4(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      cleave-zen:
+        specifier: ^0.0.17
+        version: 0.0.17
       react:
         specifier: ^19.2.6
         version: 19.2.6
@@ -1037,6 +1040,9 @@ packages:
   chokidar@5.0.0:
     resolution: {integrity: sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==}
     engines: {node: '>= 20.19.0'}
+
+  cleave-zen@0.0.17:
+    resolution: {integrity: sha512-SLuad6RaACsONu3Fr4F3sE9YXxMlMv6AiaZ8qkwfdV9Ex+TJ+ip3rLFsdrqvnp0YGlslfzAfw8q8MwQJW3yHdg==}
 
   confbox@0.2.4:
     resolution: {integrity: sha512-ysOGlgTFbN2/Y6Cg3Iye8YKulHw+R2fNXHrgSmXISQdMnomY6eNDprVdW9R5xBguEqI954+S6709UyiO7B+6OQ==}
@@ -2978,6 +2984,8 @@ snapshots:
   chokidar@5.0.0:
     dependencies:
       readdirp: 5.0.0
+
+  cleave-zen@0.0.17: {}
 
   confbox@0.2.4: {}
 

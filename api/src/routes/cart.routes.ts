@@ -4,7 +4,22 @@ import {
 	authenticate,
 	type AuthRequest,
 } from "../middleware/auth.middleware.js";
-import { addToCartSchema } from "@ntv/shared";
+import { z } from "zod";
+import { addToCartSchema, updateCartItemSchema } from "@ntv/shared";
+
+const idSchema = z.coerce.number().int().positive();
+
+const cartInclude = {
+	items: {
+		include: {
+			variant: {
+				include: {
+					product: { include: { category: true, variants: true } },
+				},
+			},
+		},
+	},
+} as const;
 
 const router: IRouter = Router();
 
@@ -14,17 +29,7 @@ router.use(authenticate);
 router.get("/", async (req: AuthRequest, res) => {
 	let cart = await prisma.cart.findUnique({
 		where: { userId: req.userId },
-		include: {
-			items: {
-				include: {
-					variant: {
-						include: {
-							product: { include: { category: true, variants: true } },
-						},
-					},
-				},
-			},
-		},
+		include: cartInclude,
 	});
 
 	if (!cart) {
@@ -93,17 +98,49 @@ router.post("/items", async (req: AuthRequest, res) => {
 
 	const updated = await prisma.cart.findUnique({
 		where: { id: cart.id },
-		include: {
-			items: {
-				include: {
-					variant: {
-						include: {
-							product: { include: { category: true, variants: true } },
-						},
-					},
-				},
-			},
-		},
+		include: cartInclude,
+	});
+
+	res.json({ cart: updated });
+});
+
+// PATCH /api/cart/items/:itemId *_* update quantity of an item in the cart
+router.patch("/items/:itemId", async (req: AuthRequest, res) => {
+	const idResult = idSchema.safeParse(req.params.itemId);
+	if (!idResult.success) {
+		res.status(400).json({ error: "Invalid item id" });
+		return;
+	}
+	const itemId = idResult.data;
+
+	const result = updateCartItemSchema.safeParse(req.body);
+	if (!result.success) {
+		res.status(400).json({ error: result.error.issues.map((i) => i.message).join(", ") });
+		return;
+	}
+
+	const cart = await prisma.cart.findUnique({ where: { userId: req.userId } });
+	if (!cart) {
+		res.status(404).json({ error: "Cart not found" });
+		return;
+	}
+
+	const item = await prisma.cartItem.findFirst({
+		where: { id: itemId, cartId: cart.id },
+	});
+	if (!item) {
+		res.status(404).json({ error: "Item not found in cart" });
+		return;
+	}
+
+	await prisma.cartItem.update({
+		where: { id: itemId },
+		data: { quantity: result.data.quantity },
+	});
+
+	const updated = await prisma.cart.findUnique({
+		where: { id: cart.id },
+		include: cartInclude,
 	});
 
 	res.json({ cart: updated });
@@ -111,11 +148,12 @@ router.post("/items", async (req: AuthRequest, res) => {
 
 // DELETE /api/cart/items/:itemId *_* remove an item from the user's cart
 router.delete("/items/:itemId", async (req: AuthRequest, res) => {
-	const itemId = Number(req.params.itemId);
-	if (isNaN(itemId)) {
+	const idResult = idSchema.safeParse(req.params.itemId);
+	if (!idResult.success) {
 		res.status(400).json({ error: "Invalid item id" });
 		return;
 	}
+	const itemId = idResult.data;
 
 	const cart = await prisma.cart.findUnique({ where: { userId: req.userId } });
 	if (!cart) {
@@ -135,17 +173,7 @@ router.delete("/items/:itemId", async (req: AuthRequest, res) => {
 
 	const updated = await prisma.cart.findUnique({
 		where: { id: cart.id },
-		include: {
-			items: {
-				include: {
-					variant: {
-						include: {
-							product: { include: { category: true, variants: true } },
-						},
-					},
-				},
-			},
-		},
+		include: cartInclude,
 	});
 
 	res.json({ cart: updated });

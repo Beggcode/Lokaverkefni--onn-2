@@ -20,3 +20,11 @@ export async function removeFromCart(itemId: number) {
   const data = await apiFetchJson<{ cart: unknown }>(`/api/cart/items/${itemId}`, { method: 'DELETE' })
   return cartSchema.parse(data.cart)
 }
+
+export async function updateCartItem(itemId: number, quantity: number) {
+  const data = await apiFetchJson<{ cart: unknown }>(`/api/cart/items/${itemId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ quantity }),
+  })
+  return cartSchema.parse(data.cart)
+}

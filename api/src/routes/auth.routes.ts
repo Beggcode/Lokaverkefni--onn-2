@@ -8,6 +8,11 @@ import { env } from "../lib/env.js";
 
 const router: IRouter = Router();
 
+function setAuthCookie(res: import("express").Response, userId: number) {
+  const token = jwt.sign({ userId }, env.JWT_SECRET, { expiresIn: "7d" });
+  res.cookie("token", token, { httpOnly: true, sameSite: "lax", maxAge: 7 * 24 * 60 * 60 * 1000 });
+}
+
 router.post("/register", async (req, res) => {
   const result = registerSchema.safeParse(req.body);
   if (!result.success) { res.status(400).json({ error: result.error.issues.map(i => i.message).join(', ') }); return; }
@@ -17,8 +22,7 @@ router.post("/register", async (req, res) => {
     data: { email, password: hashed, name },
     select: { id: true, email: true, name: true },
   });
-  const token = jwt.sign({ userId: user.id }, env.JWT_SECRET, { expiresIn: "7d" });
-  res.cookie("token", token, { httpOnly: true, sameSite: "lax", maxAge: 7 * 24 * 60 * 60 * 1000 });
+  setAuthCookie(res, user.id);
   res.status(201).json({ user });
 });
 
@@ -31,8 +35,7 @@ router.post("/login", async (req, res) => {
     res.status(401).json({ error: "Invalid credentials" });
     return;
   }
-  const token = jwt.sign({ userId: user.id }, env.JWT_SECRET, { expiresIn: "7d" });
-  res.cookie("token", token, { httpOnly: true, sameSite: "lax", maxAge: 7 * 24 * 60 * 60 * 1000 });
+  setAuthCookie(res, user.id);
   res.json({ user: { id: user.id, email: user.email, name: user.name } });
 });
 

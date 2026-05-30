@@ -14,6 +14,7 @@
     "@tanstack/react-form": "^1.32.0",
     "@tanstack/react-query": "^5.100.10",
     "@tanstack/react-router": "^1.170.4",
+    "cleave-zen": "^0.0.17",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "zod": "^4.4.3",

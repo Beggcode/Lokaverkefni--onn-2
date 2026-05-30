@@ -70,8 +70,36 @@ export const cartSchema = z.object({
 export const addToCartSchema = z.object({
   variantId: z.number(),
   quantity: z.number().min(1),
+})
+
+export const updateCartItemSchema = z.object({
+  quantity: z.number().min(1),
 });
 
 export type CartItem = z.infer<typeof cartItemSchema>;
 export type Cart = z.infer<typeof cartSchema>;
 export type AddToCart = z.infer<typeof addToCartSchema>;
+
+export const orderStatusSchema = z.enum(['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED']);
+
+export const orderItemSchema = z.object({
+  id: z.number(),
+  variantId: z.number(),
+  quantity: z.number(),
+  price: z.number(),
+  variant: variantSchema.extend({ product: productSchema }),
+});
+
+export const orderSchema = z.object({
+  id: z.number(),
+  status: orderStatusSchema,
+  total: z.number(),
+  createdAt: z.string(),
+  items: z.array(orderItemSchema),
+});
+
+export const orderListSchema = z.array(orderSchema);
+
+export type OrderStatus = z.infer<typeof orderStatusSchema>;
+export type OrderItem = z.infer<typeof orderItemSchema>;
+export type Order = z.infer<typeof orderSchema>;
