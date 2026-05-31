@@ -1,9 +1,15 @@
-import { createRoute } from '@tanstack/react-router'
+import { createRoute, redirect } from '@tanstack/react-router'
 import { rootRoute } from '../../../router.root'
-import Checkout from './Checkout'
+import { useAuthStore } from '../../auth'
+import Checkout from '../components/Checkout'
 
 export const Route = createRoute({
   getParentRoute: () => rootRoute,
   path: '/checkout',
   component: Checkout,
+  beforeLoad: () => {
+    if (!useAuthStore.getState().user) {
+      throw redirect({ to: '/login', search: { redirect: '/checkout' } })
+    }
+  },
 })

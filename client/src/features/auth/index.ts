@@ -1,3 +1,3 @@
-export { loginUser, registerUser, logoutUser } from './auth'
-export { useAuthStore } from './authStore'
-export type { User } from './auth'
+export { loginUser, registerUser, logoutUser, fetchMe } from './services/auth'
+export { useAuthStore } from './store/authStore'
+export type { User } from './services/auth'
