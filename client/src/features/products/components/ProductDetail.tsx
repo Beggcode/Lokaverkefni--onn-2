@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Route } from "../pages/product.route";
 import type { Variant } from "@ntv/shared";
-import { formatVariant } from "../../../shared/lib/formatVariant";
+import { formatSize } from "../../../shared/lib/formatSize";
 import { useProduct } from "../hooks/useProduct";
 import { useAddToCart } from "../../cart/hooks/useAddToCart";
 
@@ -31,6 +31,7 @@ export default function ProductDetail() {
 
   return (
     <div>
+      {product.imageUrl && <img src={product.imageUrl} alt={product.name} />}
       <h1>{product.name}</h1>
       <p>
         {product.category.name} — {product.season}
@@ -50,7 +51,7 @@ export default function ProductDetail() {
           >
             {product.variants.map((v) => (
               <option key={v.id} value={v.id} disabled={v.stock === 0}>
-                {formatVariant(v)}{" "}
+                {formatSize(v)}{" "}
                 {v.stock === 0 ? "(out of stock)" : `(${v.stock} left)`}
               </option>
             ))}

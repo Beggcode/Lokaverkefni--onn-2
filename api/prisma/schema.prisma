@@ -44,7 +44,6 @@ model Product {
 model ProductVariant {
   id        Int     @id @default(autoincrement())
   size      String?
-  color     String?
   stock     Int     @default(0)
 
   productId  Int

@@ -1,5 +1,5 @@
 import { Link, useParams } from "@tanstack/react-router";
-import { formatVariant } from "../../../shared/lib/formatVariant";
+import { formatSize } from "../../../shared/lib/formatSize";
 import { useOrder } from "../hooks/useOrder";
 
 export default function OrderConfirmation() {
@@ -18,7 +18,7 @@ export default function OrderConfirmation() {
         <ul>
           {order.items.map((item) => (
             <li key={item.id}>
-              {item.variant.product.name} — {formatVariant(item.variant)} ×{" "}
+              {item.variant.product.name} — {formatSize(item.variant)} ×{" "}
               {item.quantity} — {(item.price * item.quantity).toLocaleString()}{" "}
               kr
             </li>

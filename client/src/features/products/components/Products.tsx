@@ -57,6 +57,7 @@ export default function Products() {
       <ul>
         {products.map((p) => (
           <li key={p.id}>
+            {p.imageUrl && <img src={p.imageUrl} alt={p.name} />}
             <Link
               to="/products/$productId"
               params={{ productId: String(p.id) }}

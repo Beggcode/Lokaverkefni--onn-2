@@ -17,7 +17,7 @@ export default function Cart() {
           <li key={item.id}>
             <span>
               <strong>{item.variant.product.name}</strong> — {item.variant.size}{" "}
-              / {item.variant.color} — {item.variant.product.price} kr
+              — {item.variant.product.price} kr
             </span>
             <button
               onClick={() =>

@@ -34,7 +34,6 @@ export const seasonSchema = z.enum([
 export const variantSchema = z.object({
   id: z.number(),
   size: z.string().nullable(),
-  color: z.string().nullable(),
   stock: z.number(),
 });
 

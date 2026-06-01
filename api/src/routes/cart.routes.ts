@@ -59,10 +59,17 @@ router.post("/items", async (req: AuthRequest, res) => {
   const existing = await prisma.cartItem.findFirst({
     where: { cartId: cart.id, variantId },
   });
+
+  const newTotal = (existing?.quantity ?? 0) + quantity;
+  if (newTotal > variant.stock) {
+    res.status(400).json({ error: "Not enough stock" });
+    return;
+  }
+
   if (existing) {
     await prisma.cartItem.update({
       where: { id: existing.id },
-      data: { quantity: existing.quantity + quantity },
+      data: { quantity: newTotal },
     });
   } else {
     await prisma.cartItem.create({

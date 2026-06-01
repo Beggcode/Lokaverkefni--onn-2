@@ -8,7 +8,7 @@ import {
   DefaultCreditCardDelimiter,
 } from "cleave-zen";
 import cardValidator from "card-validator";
-import { formatVariant } from "../../../shared/lib/formatVariant";
+import { formatSize } from "../../../shared/lib/formatSize";
 import { useCart } from "../../cart/hooks/useCart";
 import { useCheckout } from "../hooks/useCheckout";
 
@@ -86,7 +86,7 @@ export default function Checkout() {
         <ul>
           {cart.items.map((item) => (
             <li key={item.id}>
-              {item.variant.product.name} — {formatVariant(item.variant)} ×{" "}
+              {item.variant.product.name} — {formatSize(item.variant)} ×{" "}
               {item.quantity} —{" "}
               {(item.variant.product.price * item.quantity).toLocaleString()} kr
             </li>
