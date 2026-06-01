@@ -1,27 +1,19 @@
 import { Router, type IRouter } from "express";
-import { z } from "zod";
 import { prisma } from "../lib/prisma.js";
-
-const idSchema = z.coerce.number().int().positive();
+import { parseId } from "../lib/parse.js";
 
 const productInclude = { category: true, variants: true } as const;
 
 const router: IRouter = Router();
 
 router.get("/", async (_req, res) => {
-  const products = await prisma.product.findMany({
-    include: productInclude,
-  });
+  const products = await prisma.product.findMany({ include: productInclude });
   res.json({ products });
 });
 
 router.get("/:id", async (req, res) => {
-  const result = idSchema.safeParse(req.params.id);
-  if (!result.success) {
-    res.status(400).json({ error: "Invalid product id" });
-    return;
-  }
-  const id = result.data;
+  const id = parseId(req.params.id, res);
+  if (id === null) return;
   const product = await prisma.product.findUnique({
     where: { id },
     include: productInclude,

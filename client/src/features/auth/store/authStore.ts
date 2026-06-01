@@ -1,13 +1,13 @@
 // remembers what the server said
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import type { User } from '@ntv/shared'
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type { User } from "@ntv/shared";
 
 type AuthStore = {
-  user: User | null
-  setUser: (user: User) => void
-  clearUser: () => void
-}
+  user: User | null;
+  setUser: (user: User) => void;
+  clearUser: () => void;
+};
 
 export const useAuthStore = create<AuthStore>()(
   persist(
@@ -16,6 +16,6 @@ export const useAuthStore = create<AuthStore>()(
       setUser: (user) => set({ user }),
       clearUser: () => set({ user: null }),
     }),
-    { name: 'auth' }
-  )
-)
+    { name: "auth" },
+  ),
+);

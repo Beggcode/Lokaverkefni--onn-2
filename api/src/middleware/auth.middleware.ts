@@ -7,7 +7,11 @@ export interface AuthRequest extends Request {
   userId?: number;
 }
 
-export function authenticate(req: AuthRequest, res: Response, next: NextFunction) {
+export function authenticate(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) {
   const token = req.cookies?.token;
   if (!token) {
     res.status(401).json({ error: "Unauthorized" });

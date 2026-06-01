@@ -1,25 +1,32 @@
-import { Router, type IRouter } from "express";
+import { Router, type IRouter, type Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
-import { authenticate, type AuthRequest } from "../middleware/auth.middleware.js";
+import {
+  authenticate,
+  type AuthRequest,
+} from "../middleware/auth.middleware.js";
 import { loginSchema, registerSchema } from "@ntv/shared";
 import { env } from "../lib/env.js";
+import { parseBody } from "../lib/parse.js";
 
 const router: IRouter = Router();
 
-function setAuthCookie(res: import("express").Response, userId: number) {
+function setAuthCookie(res: Response, userId: number) {
   const token = jwt.sign({ userId }, env.JWT_SECRET, { expiresIn: "7d" });
-  res.cookie("token", token, { httpOnly: true, sameSite: "lax", maxAge: 7 * 24 * 60 * 60 * 1000 });
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
 }
 
 router.post("/register", async (req, res) => {
-  const result = registerSchema.safeParse(req.body);
-  if (!result.success) { res.status(400).json({ error: result.error.issues.map(i => i.message).join(', ') }); return; }
-  const { email, password, name } = result.data;
-  const hashed = await bcrypt.hash(password, 12);
+  const body = parseBody(registerSchema, req.body, res);
+  if (!body) return;
+  const hashed = await bcrypt.hash(body.password, 12);
   const user = await prisma.user.create({
-    data: { email, password: hashed, name },
+    data: { email: body.email, password: hashed, name: body.name },
     select: { id: true, email: true, name: true },
   });
   setAuthCookie(res, user.id);
@@ -27,11 +34,10 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const result = loginSchema.safeParse(req.body);
-  if (!result.success) { res.status(400).json({ error: result.error.issues.map(i => i.message).join(', ') }); return; }
-  const { email, password } = result.data;
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
+  const body = parseBody(loginSchema, req.body, res);
+  if (!body) return;
+  const user = await prisma.user.findUnique({ where: { email: body.email } });
+  if (!user || !(await bcrypt.compare(body.password, user.password))) {
     res.status(401).json({ error: "Invalid credentials" });
     return;
   }

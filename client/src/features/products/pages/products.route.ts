@@ -1,9 +1,9 @@
-import { createRoute } from '@tanstack/react-router'
-import { rootRoute } from '../../../router.root'
-import Products from './Products'
+import { createRoute } from "@tanstack/react-router";
+import { rootRoute } from "../../../router.root";
+import Products from "../components/Products";
 
 export const Route = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/products',
+  path: "/products",
   component: Products,
-})
+});

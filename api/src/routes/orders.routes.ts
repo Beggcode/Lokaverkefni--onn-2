@@ -1,9 +1,10 @@
 import { Router, type IRouter } from "express";
-import { z } from "zod";
 import { prisma } from "../lib/prisma.js";
-import { authenticate, type AuthRequest } from "../middleware/auth.middleware.js";
-
-const idSchema = z.coerce.number().int().positive();
+import {
+  authenticate,
+  type AuthRequest,
+} from "../middleware/auth.middleware.js";
+import { parseId } from "../lib/parse.js";
 
 const router: IRouter = Router();
 
@@ -21,11 +22,12 @@ const orderInclude = {
   },
 };
 
-// POST /api/orders — convert cart into an order and clear the cart
 router.post("/", async (req: AuthRequest, res) => {
   const cart = await prisma.cart.findUnique({
     where: { userId: req.userId },
-    include: { items: { include: { variant: { include: { product: true } } } } },
+    include: {
+      items: { include: { variant: { include: { product: true } } } },
+    },
   });
 
   if (!cart || cart.items.length === 0) {
@@ -35,7 +37,7 @@ router.post("/", async (req: AuthRequest, res) => {
 
   const total = cart.items.reduce(
     (sum, item) => sum + item.variant.product.price * item.quantity,
-    0
+    0,
   );
 
   const order = await prisma.$transaction(async (tx) => {
@@ -53,34 +55,25 @@ router.post("/", async (req: AuthRequest, res) => {
       },
       include: orderInclude,
     });
-
     await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
-
     return created;
   });
 
   res.status(201).json({ order });
 });
 
-// GET /api/orders — list all orders for the logged in user
 router.get("/", async (req: AuthRequest, res) => {
   const orders = await prisma.order.findMany({
     where: { userId: req.userId },
     orderBy: { createdAt: "desc" },
     include: orderInclude,
   });
-
   res.json({ orders });
 });
 
-// GET /api/orders/:id — get a single order
 router.get("/:id", async (req: AuthRequest, res) => {
-  const result = idSchema.safeParse(req.params.id);
-  if (!result.success) {
-    res.status(400).json({ error: "Invalid order id" });
-    return;
-  }
-  const id = result.data;
+  const id = parseId(req.params.id, res);
+  if (id === null) return;
 
   const order = await prisma.order.findFirst({
     where: { id, userId: req.userId },
