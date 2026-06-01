@@ -116,6 +116,13 @@ export type OrderStatus = z.infer<typeof orderStatusSchema>;
 export type OrderItem = z.infer<typeof orderItemSchema>;
 export type Order = z.infer<typeof orderSchema>;
 
+export const productQuerySchema = z.object({
+  search: z.string().optional(),
+  categoryId: z.number().optional(),
+});
+
+export type ProductQuery = z.infer<typeof productQuerySchema>;
+
 export const userResponseSchema = z.object({ user: userSchema });
 export const cartResponseSchema = z.object({ cart: cartSchema });
 export const orderResponseSchema = z.object({ order: orderSchema });
