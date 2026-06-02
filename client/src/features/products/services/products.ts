@@ -8,14 +8,14 @@ import { apiFetchJson } from "../../../shared/lib/apiFetch";
 export type { Product } from "@ntv/shared";
 
 export async function getProducts(query: ProductQuery = {}) {
-  const params = new URLSearchParams();
-  if (query.search) params.set("search", query.search);
-  if (query.categoryId) params.set("categoryId", String(query.categoryId));
-  const qs = params.size ? `?${params}` : "";
-  const data = await apiFetchJson(
-    productListResponseSchema,
-    `/api/products${qs}`,
-  );
+  const filters: Record<string, string> = {};
+  if (query.search) filters.search = query.search;
+  if (query.categoryId) filters.categoryId = String(query.categoryId);
+
+  const queryString = new URLSearchParams(filters).toString();
+  const url = queryString ? `/api/products?${queryString}` : "/api/products";
+
+  const data = await apiFetchJson(productListResponseSchema, url);
   return data.products;
 }
 
