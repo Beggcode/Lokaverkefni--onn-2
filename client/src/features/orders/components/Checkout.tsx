@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { z } from "zod";
 import {
   formatCreditCard,
   getCreditCardType,
@@ -7,34 +6,10 @@ import {
   registerCursorTracker,
   DefaultCreditCardDelimiter,
 } from "cleave-zen";
-import cardValidator from "card-validator";
 import { formatSize } from "../../../shared/lib/formatSize";
 import { useCart } from "../../cart/hooks/useCart";
 import { useCheckout } from "../hooks/useCheckout";
-
-const checkoutFormSchema = z
-  .object({
-    name: z.string().min(1, "Name is required"),
-    cardNumber: z
-      .string()
-      .refine(
-        (val) => cardValidator.number(val).isValid,
-        "Enter a valid card number",
-      ),
-    expiry: z
-      .string()
-      .refine(
-        (val) => cardValidator.expirationDate(val).isValid,
-        "Invalid or expired date",
-      ),
-    cvv: z.string().min(1, "CVV is required"),
-  })
-  .superRefine((data, ctx) => {
-    const cvvLength = cardValidator.number(data.cardNumber).card?.code.size;
-    if (!cardValidator.cvv(data.cvv, cvvLength).isValid) {
-      ctx.addIssue({ code: "custom", message: "Invalid CVV", path: ["cvv"] });
-    }
-  });
+import { checkoutFormSchema } from "../lib/checkoutSchema";
 
 export default function Checkout() {
   const { data: cart, isPending, error } = useCart();
@@ -62,10 +37,10 @@ export default function Checkout() {
   if (error) return <p role="alert">{error.message}</p>;
   if (cart.items.length === 0) return <p>Your cart is empty.</p>;
 
-  const total = cart.items.reduce(
-    (sum, item) => sum + item.variant.product.price * item.quantity,
-    0,
-  );
+  let total = 0;
+  for (const item of cart.items) {
+    total += item.variant.product.price * item.quantity;
+  }
 
   function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
