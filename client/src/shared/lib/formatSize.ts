@@ -1,3 +1,3 @@
 export function formatSize(variant: { size: string | null }): string {
-  return variant.size ?? "";
+	return variant.size ?? "";
 }

@@ -3,7 +3,7 @@ import { rootRoute } from "../../../router.root";
 import Cart from "../components/Cart";
 
 export const Route = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/cart",
-  component: Cart,
+	getParentRoute: () => rootRoute,
+	path: "/cart",
+	component: Cart,
 });

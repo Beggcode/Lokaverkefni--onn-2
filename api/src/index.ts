@@ -1,8 +1,8 @@
 import "dotenv/config";
 import express, {
-  type Request,
-  type Response,
-  type NextFunction,
+	type Request,
+	type Response,
+	type NextFunction,
 } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.get("/api", (_req, res) => {
-  res.json({ message: "API is running" });
+	res.json({ message: "API is running" });
 });
 
 app.use("/api/auth", authRoutes);
@@ -28,10 +28,10 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
-  console.error(err);
-  res.status(500).json({ error: "Internal server error" });
+	console.error(err);
+	res.status(500).json({ error: "Internal server error" });
 });
 
 app.listen(env.PORT, () => {
-  console.log(`Server running on port ${env.PORT}`);
+	console.log(`Server running on port ${env.PORT}`);
 });

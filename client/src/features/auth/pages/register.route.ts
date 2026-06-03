@@ -4,8 +4,8 @@ import { rootRoute } from "../../../router.root";
 import Register from "./Register";
 
 export const Route = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/register",
-  component: Register,
-  validateSearch: z.object({ redirect: z.string().optional().default("/") }),
+	getParentRoute: () => rootRoute,
+	path: "/register",
+	component: Register,
+	validateSearch: z.object({ redirect: z.string().optional().default("/") }),
 });

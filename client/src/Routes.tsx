@@ -10,24 +10,24 @@ import { Route as checkoutRoute } from "./features/orders/pages/checkout.route";
 import { Route as orderConfirmationRoute } from "./features/orders/pages/order-confirmation.route";
 
 const router = createRouter({
-  routeTree: rootRoute.addChildren([
-    homeRoute,
-    loginRoute,
-    registerRoute,
-    productsRoute,
-    productRoute,
-    cartRoute,
-    checkoutRoute,
-    orderConfirmationRoute,
-  ]),
+	routeTree: rootRoute.addChildren([
+		homeRoute,
+		loginRoute,
+		registerRoute,
+		productsRoute,
+		productRoute,
+		cartRoute,
+		checkoutRoute,
+		orderConfirmationRoute,
+	]),
 });
 
 declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
+	interface Register {
+		router: typeof router;
+	}
 }
 
 export default function Routes() {
-  return <RouterProvider router={router} />;
+	return <RouterProvider router={router} />;
 }

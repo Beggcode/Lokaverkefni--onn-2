@@ -4,12 +4,12 @@ import { useAuthStore } from "../../auth";
 import Checkout from "../components/Checkout";
 
 export const Route = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/checkout",
-  component: Checkout,
-  beforeLoad: () => {
-    if (!useAuthStore.getState().user) {
-      throw redirect({ to: "/login", search: { redirect: "/checkout" } });
-    }
-  },
+	getParentRoute: () => rootRoute,
+	path: "/checkout",
+	component: Checkout,
+	beforeLoad: () => {
+		if (!useAuthStore.getState().user) {
+			throw redirect({ to: "/login", search: { redirect: "/checkout" } });
+		}
+	},
 });
