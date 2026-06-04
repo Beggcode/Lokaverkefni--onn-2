@@ -78,9 +78,6 @@ export default function ProductDetail() {
 				/>
 			</div>
 
-			{add.isSuccess && <p>Added to cart!</p>}
-			{add.isError && <p role="alert">{add.error.message}</p>}
-
 			<button
 				onClick={() => add.mutate({ variantId: variant.id, quantity })}
 				disabled={add.isPending || !variant || variant.stock === 0}

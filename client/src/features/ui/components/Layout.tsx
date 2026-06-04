@@ -3,8 +3,10 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { ShoppingBag } from "lucide-react";
 import logo from "../../../assets/NtvLogo.png";
 import { logoutUser, useAuthStore } from "../../auth";
+import { useToastStore } from "../store/toastStore";
 import MegaMenu from "./MegaMenu";
 import SearchOverlay from "./SearchOverlay";
+import Toaster from "./Toaster";
 
 type Props = { children: React.ReactNode };
 
@@ -12,11 +14,13 @@ export default function Layout({ children }: Props) {
 	const user = useAuthStore((s) => s.user);
 	const clearUser = useAuthStore((s) => s.clearUser);
 	const navigate = useNavigate();
+	const showToast = useToastStore((s) => s.showToast);
 
 	async function handleLogout() {
 		await logoutUser();
 		clearUser();
 		navigate({ to: "/" });
+		showToast("Logged out", "success");
 	}
 
 	return (
@@ -109,6 +113,7 @@ export default function Layout({ children }: Props) {
 				</div>
 			</nav>
 			<main>{children}</main>
+			<Toaster />
 		</>
 	);
 }

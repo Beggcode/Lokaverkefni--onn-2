@@ -127,7 +127,6 @@ export default function Checkout() {
 						/>
 					</label>
 					{formError && <p role="alert">{formError}</p>}
-					{place.error && <p role="alert">{place.error.message}</p>}
 					<button type="submit" disabled={place.isPending}>
 						{place.isPending ? "Placing order…" : "Place order"}
 					</button>
