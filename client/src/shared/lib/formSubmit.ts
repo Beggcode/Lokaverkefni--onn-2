@@ -1,5 +1,5 @@
 export function handleFormSubmit(
-	e: React.SyntheticEvent<HTMLFormElement>,
+	e: Event,
 	submit: () => void,
 ) {
 	e.preventDefault();

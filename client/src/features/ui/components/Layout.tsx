@@ -1,9 +1,10 @@
 import * as Avatar from "@radix-ui/react-avatar";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Search, ShoppingBag } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import logo from "../../../assets/NtvLogo.png";
 import { logoutUser, useAuthStore } from "../../auth";
 import MegaMenu from "./MegaMenu";
+import SearchOverlay from "./SearchOverlay";
 
 type Props = { children: React.ReactNode };
 
@@ -31,7 +32,6 @@ export default function Layout({ children }: Props) {
 					background: "white",
 					position: "sticky",
 					top: 0,
-					zIndex: 100,
 				}}
 			>
 				<Link to="/">
@@ -43,9 +43,7 @@ export default function Layout({ children }: Props) {
 				</div>
 
 				<div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-					<Link to="/products" title="Search">
-						<Search size={20} color="black" />
-					</Link>
+					<SearchOverlay />
 					<Link to="/cart" title="Cart">
 						<ShoppingBag size={20} color="black" />
 					</Link>

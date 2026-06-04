@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Route } from "../pages/product.route";
 import type { Variant } from "@ntv/shared";
+import { useEffect, useState } from "react";
 import { formatSize } from "../../../shared/lib/formatSize";
-import { useProduct } from "../hooks/useProduct";
 import { useAddToCart } from "../../cart/hooks/useAddToCart";
+import { useProduct } from "../hooks/useProduct";
+import { addRecentlyViewed } from "../hooks/useRecentlyViewed";
+import { Route } from "../pages/product.route";
 
 export default function ProductDetail() {
 	const { productId: productIdStr } = Route.useParams();
@@ -22,6 +23,10 @@ export default function ProductDetail() {
 			setQuantity(1);
 		}
 	}
+
+	useEffect(() => {
+		if (product) addRecentlyViewed({ id: product.id, name: product.name });
+	}, [product]);
 
 	if (isPending) return <p>Loading…</p>;
 	if (error) return <p role="alert">{error.message}</p>;

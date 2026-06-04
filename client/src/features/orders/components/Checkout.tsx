@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect } from "react";
 import {
-	formatCreditCard,
-	getCreditCardType,
-	formatDate,
-	registerCursorTracker,
 	DefaultCreditCardDelimiter,
+	formatCreditCard,
+	formatDate,
+	getCreditCardType,
+	registerCursorTracker,
 } from "cleave-zen";
+import { useEffect, useRef, useState } from "react";
 import { formatSize } from "../../../shared/lib/formatSize";
 import { useCart } from "../../cart/hooks/useCart";
 import { useCheckout } from "../hooks/useCheckout";
@@ -42,8 +42,7 @@ export default function Checkout() {
 		total += item.variant.product.price * item.quantity;
 	}
 
-	function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
-		e.preventDefault();
+	function handleSubmit() {
 		setFormError("");
 		const result = checkoutFormSchema.safeParse(form);
 		if (!result.success) {
@@ -71,7 +70,12 @@ export default function Checkout() {
 			</section>
 			<section>
 				<h2>Payment details</h2>
-				<form onSubmit={handleSubmit}>
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						handleSubmit();
+					}}
+				>
 					<label>
 						Name on card
 						<input
