@@ -1,23 +1,41 @@
+import { addToCartSchema, updateCartItemSchema } from "@ntv/shared";
+import type { Response } from "express";
 import { Router, type IRouter } from "express";
+import { parseBody, parseId } from "../lib/parse.js";
+import { cartItemsInclude } from "../lib/prisma-includes.js";
 import { prisma } from "../lib/prisma.js";
 import {
 	authenticate,
 	type AuthRequest,
 } from "../middleware/auth.middleware.js";
-import { addToCartSchema, updateCartItemSchema } from "@ntv/shared";
-import { parseBody, parseId } from "../lib/parse.js";
 
-const cartInclude = {
-	items: {
-		include: {
-			variant: {
-				include: {
-					product: { include: { category: true, variants: true } },
-				},
-			},
-		},
-	},
-} as const;
+async function respondWithCart(cartId: number, res: Response) {
+	const cart = await prisma.cart.findUnique({
+		where: { id: cartId },
+		include: cartItemsInclude,
+	});
+	res.json({ cart });
+}
+
+async function findCartAndItem(
+	userId: number | undefined,
+	itemId: number,
+	res: Response,
+) {
+	const cart = await prisma.cart.findUnique({ where: { userId } });
+	if (!cart) {
+		res.status(404).json({ error: "Cart not found" });
+		return null;
+	}
+	const item = await prisma.cartItem.findFirst({
+		where: { id: itemId, cartId: cart.id },
+	});
+	if (!item) {
+		res.status(404).json({ error: "Item not found in cart" });
+		return null;
+	}
+	return { cart, item };
+}
 
 const router: IRouter = Router();
 
@@ -28,7 +46,7 @@ router.get("/", async (req: AuthRequest, res) => {
 		where: { userId: req.userId! },
 		create: { userId: req.userId! },
 		update: {},
-		include: cartInclude,
+		include: cartItemsInclude,
 	});
 	res.json({ cart });
 });
@@ -77,11 +95,7 @@ router.post("/items", async (req: AuthRequest, res) => {
 		});
 	}
 
-	const updated = await prisma.cart.findUnique({
-		where: { id: cart.id },
-		include: cartInclude,
-	});
-	res.json({ cart: updated });
+	await respondWithCart(cart.id, res);
 });
 
 router.patch("/items/:itemId", async (req: AuthRequest, res) => {
@@ -91,57 +105,29 @@ router.patch("/items/:itemId", async (req: AuthRequest, res) => {
 	const body = parseBody(updateCartItemSchema, req.body, res);
 	if (!body) return;
 
-	const cart = await prisma.cart.findUnique({ where: { userId: req.userId } });
-	if (!cart) {
-		res.status(404).json({ error: "Cart not found" });
-		return;
-	}
-
-	const item = await prisma.cartItem.findFirst({
-		where: { id: itemId, cartId: cart.id },
-	});
-	if (!item) {
-		res.status(404).json({ error: "Item not found in cart" });
-		return;
-	}
+	const found = await findCartAndItem(req.userId, itemId, res);
+	if (!found) return;
+	const { cart } = found;
 
 	await prisma.cartItem.update({
 		where: { id: itemId },
 		data: { quantity: body.quantity },
 	});
 
-	const updated = await prisma.cart.findUnique({
-		where: { id: cart.id },
-		include: cartInclude,
-	});
-	res.json({ cart: updated });
+	await respondWithCart(cart.id, res);
 });
 
 router.delete("/items/:itemId", async (req: AuthRequest, res) => {
 	const itemId = parseId(req.params.itemId, res);
 	if (itemId === null) return;
 
-	const cart = await prisma.cart.findUnique({ where: { userId: req.userId } });
-	if (!cart) {
-		res.status(404).json({ error: "Cart not found" });
-		return;
-	}
-
-	const item = await prisma.cartItem.findFirst({
-		where: { id: itemId, cartId: cart.id },
-	});
-	if (!item) {
-		res.status(404).json({ error: "Item not found in cart" });
-		return;
-	}
+	const found = await findCartAndItem(req.userId, itemId, res);
+	if (!found) return;
+	const { cart } = found;
 
 	await prisma.cartItem.delete({ where: { id: itemId } });
 
-	const updated = await prisma.cart.findUnique({
-		where: { id: cart.id },
-		include: cartInclude,
-	});
-	res.json({ cart: updated });
+	await respondWithCart(cart.id, res);
 });
 
 export default router;

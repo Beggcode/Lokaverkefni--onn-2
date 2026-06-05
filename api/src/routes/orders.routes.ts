@@ -1,33 +1,23 @@
 import { Router, type IRouter } from "express";
+import { parseId } from "../lib/parse.js";
+import {
+	cartCheckoutInclude,
+	cartItemsInclude,
+} from "../lib/prisma-includes.js";
 import { prisma } from "../lib/prisma.js";
 import {
 	authenticate,
 	type AuthRequest,
 } from "../middleware/auth.middleware.js";
-import { parseId } from "../lib/parse.js";
 
 const router: IRouter = Router();
 
 router.use(authenticate);
 
-const orderInclude = {
-	items: {
-		include: {
-			variant: {
-				include: {
-					product: { include: { category: true, variants: true } },
-				},
-			},
-		},
-	},
-};
-
 router.post("/", async (req: AuthRequest, res) => {
 	const cart = await prisma.cart.findUnique({
 		where: { userId: req.userId },
-		include: {
-			items: { include: { variant: { include: { product: true } } } },
-		},
+		include: cartCheckoutInclude,
 	});
 
 	if (!cart || cart.items.length === 0) {
@@ -35,10 +25,10 @@ router.post("/", async (req: AuthRequest, res) => {
 		return;
 	}
 
-	const total = cart.items.reduce(
-		(sum, item) => sum + item.variant.product.price * item.quantity,
-		0,
-	);
+	let total = 0;
+	for (const item of cart.items) {
+		total += item.variant.product.price * item.quantity;
+	}
 
 	const order = await prisma.$transaction(async (tx) => {
 		const created = await tx.order.create({
@@ -53,7 +43,7 @@ router.post("/", async (req: AuthRequest, res) => {
 					})),
 				},
 			},
-			include: orderInclude,
+			include: cartItemsInclude,
 		});
 		await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
 		return created;
@@ -66,7 +56,7 @@ router.get("/", async (req: AuthRequest, res) => {
 	const orders = await prisma.order.findMany({
 		where: { userId: req.userId },
 		orderBy: { createdAt: "desc" },
-		include: orderInclude,
+		include: cartItemsInclude,
 	});
 	res.json({ orders });
 });
@@ -77,7 +67,7 @@ router.get("/:id", async (req: AuthRequest, res) => {
 
 	const order = await prisma.order.findFirst({
 		where: { id, userId: req.userId },
-		include: orderInclude,
+		include: cartItemsInclude,
 	});
 
 	if (!order) {

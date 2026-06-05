@@ -1,3 +1,4 @@
+import { seasonSchema } from "@ntv/shared";
 import { Router, type IRouter } from "express";
 import { z } from "zod";
 import { parseId } from "../lib/parse.js";
@@ -8,7 +9,7 @@ const productInclude = { category: true, variants: true } as const;
 const querySchema = z.object({
 	search: z.string().optional(),
 	categoryId: z.coerce.number().optional(),
-	season: z.string().optional(),
+	season: seasonSchema.optional(),
 	limit: z.coerce.number().optional(),
 });
 
@@ -20,7 +21,7 @@ router.get("/", async (req, res) => {
 		where: {
 			...(search && { name: { contains: search, mode: "insensitive" } }),
 			...(categoryId && { categoryId }),
-			...(season && { season: season as any }),
+			...(season && { season }),
 		},
 		orderBy: { createdAt: "desc" },
 		...(limit && { take: limit }),

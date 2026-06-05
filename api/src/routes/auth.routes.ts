@@ -1,23 +1,25 @@
-import { Router, type IRouter, type Response } from "express";
+import { loginSchema, registerSchema } from "@ntv/shared";
 import bcrypt from "bcryptjs";
+import { Router, type IRouter, type Response } from "express";
 import jwt from "jsonwebtoken";
+import { env } from "../lib/env.js";
+import { parseBody } from "../lib/parse.js";
 import { prisma } from "../lib/prisma.js";
 import {
 	authenticate,
 	type AuthRequest,
 } from "../middleware/auth.middleware.js";
-import { loginSchema, registerSchema } from "@ntv/shared";
-import { env } from "../lib/env.js";
-import { parseBody } from "../lib/parse.js";
 
 const router: IRouter = Router();
+
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
 function setAuthCookie(res: Response, userId: number) {
 	const token = jwt.sign({ userId }, env.JWT_SECRET, { expiresIn: "7d" });
 	res.cookie("token", token, {
 		httpOnly: true,
 		sameSite: "lax",
-		maxAge: 7 * 24 * 60 * 60 * 1000,
+		maxAge: SEVEN_DAYS_MS,
 	});
 }
 
