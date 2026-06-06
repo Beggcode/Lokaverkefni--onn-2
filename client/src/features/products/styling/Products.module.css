@@ -1,0 +1,112 @@
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 40px 32px;
+}
+
+.filters {
+	display: flex;
+	gap: 16px;
+	margin-bottom: 32px;
+}
+
+.searchInput {
+	flex: 1;
+	padding: 10px 14px;
+	border: 1px solid lightgray;
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	outline: none;
+}
+
+.searchInput:focus {
+	border-color: black;
+}
+
+.categorySelect {
+	padding: 10px 14px;
+	border: 1px solid lightgray;
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	background: white;
+	cursor: pointer;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 24px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.card {
+	display: flex;
+	flex-direction: column;
+}
+
+.cardLink {
+	text-decoration: none;
+	color: inherit;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.cardImageWrapper {
+	border: 1.5px solid black;
+	padding: 4px;
+	background: white;
+	aspect-ratio: 3 / 4;
+	display: flex;
+}
+
+.cardImage {
+	width: 100%;
+	object-fit: cover;
+}
+
+.cardBody {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.cardName {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 18px;
+}
+
+.cardMeta {
+	font-family: Inter, sans-serif;
+	font-size: 13px;
+	color: #666;
+}
+
+.cardPrice {
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+	.grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 768px) {
+	.container {
+		padding: 24px 16px;
+	}
+
+	.filters {
+		flex-direction: column;
+	}
+
+	.grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 16px;
+	}
+}

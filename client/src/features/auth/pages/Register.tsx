@@ -1,24 +1,15 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useToastStore } from "../../ui/store/toastStore";
+import { Link } from "@tanstack/react-router";
 import RegisterForm from "../components/RegisterForm";
-import { useAuthStore } from "../index";
+import { useOnAuthSuccess } from "../hooks/useOnAuthSuccess";
 import { Route } from "./register.route";
 
 export default function Register() {
-	const navigate = useNavigate();
 	const { redirect } = Route.useSearch();
-	const setUser = useAuthStore((s) => s.setUser);
-	const showToast = useToastStore((s) => s.showToast);
+	const onSuccess = useOnAuthSuccess(redirect, (name) => `Welcome, ${name}!`);
 
 	return (
 		<>
-			<RegisterForm
-				onSuccess={(user) => {
-					setUser(user);
-					showToast(`Welcome, ${user.name}!`, "success");
-					navigate({ to: redirect });
-				}}
-			/>
+			<RegisterForm onSuccess={onSuccess} />
 			<Link to="/login">Already have an account? Login</Link>
 		</>
 	);

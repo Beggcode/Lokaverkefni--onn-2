@@ -1,0 +1,116 @@
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 40px 32px;
+}
+
+.layout {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 48px;
+	align-items: start;
+}
+
+.imageWrapper {
+	border: 1.5px solid black;
+	padding: 4px;
+	background: white;
+}
+
+.image {
+	width: 100%;
+	aspect-ratio: 3 / 4;
+	object-fit: cover;
+	display: block;
+}
+
+.info {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.name {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 2.5rem;
+	margin: 0;
+}
+
+.meta {
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	color: #666;
+	margin: 0;
+}
+
+.description {
+	font-family: Inter, sans-serif;
+	font-size: 15px;
+	line-height: 1.6;
+	margin: 0;
+}
+
+.price {
+	font-family: Inter, sans-serif;
+	font-size: 20px;
+	font-weight: 600;
+	margin: 0;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.field label {
+	font-family: Inter, sans-serif;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.field select,
+.field input {
+	padding: 10px 14px;
+	border: 1px solid lightgray;
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	background: white;
+	outline: none;
+}
+
+.field select:focus,
+.field input:focus {
+	border-color: black;
+}
+
+.addButton {
+	padding: 14px;
+	background: black;
+	color: white;
+	border: none;
+	cursor: pointer;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 18px;
+	letter-spacing: 0.05em;
+}
+
+.addButton:disabled {
+	background: lightgray;
+	cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+	.container {
+		padding: 24px 16px;
+	}
+
+	.layout {
+		grid-template-columns: 1fr;
+		gap: 24px;
+	}
+
+	.name {
+		font-size: 2rem;
+	}
+}

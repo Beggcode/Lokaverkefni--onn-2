@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { checkoutFormSchema } from "./checkoutSchema";
 
 const valid = {
-	name: "Kalli korthafi",
+	name: "Test User",
 	cardNumber: "4111 1111 1111 1111",
 	expiry: "12/26",
 	cvv: "123",

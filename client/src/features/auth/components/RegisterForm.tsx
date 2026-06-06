@@ -2,21 +2,18 @@ import { registerSchema, type User } from "@ntv/shared";
 import { useForm } from "@tanstack/react-form";
 import FieldError from "../../../shared/components/FieldError";
 import SubmitButton from "../../../shared/components/SubmitButton";
-import { fieldValidator } from "../../../shared/lib/fieldValidator";
-import { handleFormSubmit } from "../../../shared/lib/formSubmit";
-import { useToastStore } from "../../ui/store/toastStore";
+import { createFormValidators } from "../../../shared/lib/createFormValidators";
+import { handleFormSubmit } from "../lib/formSubmit";
+import { useToast } from "../../../shared/hooks/useToast";
+import { errorMessage } from "../../../shared/lib/errorMessage";
 import { registerUser } from "../services/auth";
 
 type Props = { onSuccess: (user: User) => void };
 
-const validators = {
-	name: fieldValidator(registerSchema.shape.name),
-	email: fieldValidator(registerSchema.shape.email),
-	password: fieldValidator(registerSchema.shape.password),
-};
+const validators = createFormValidators(registerSchema);
 
 export default function RegisterForm({ onSuccess }: Props) {
-	const showToast = useToastStore((s) => s.showToast);
+	const showToast = useToast();
 
 	const form = useForm({
 		defaultValues: { name: "", email: "", password: "" },
@@ -29,7 +26,7 @@ export default function RegisterForm({ onSuccess }: Props) {
 				);
 				onSuccess(user);
 			} catch (err) {
-				showToast((err as Error).message, "error");
+				showToast(errorMessage(err), "error");
 			}
 		},
 	});

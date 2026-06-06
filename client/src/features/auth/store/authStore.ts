@@ -1,4 +1,3 @@
-// remembers what the server said
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { User } from "@ntv/shared";

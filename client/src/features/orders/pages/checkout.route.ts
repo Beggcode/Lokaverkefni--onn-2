@@ -1,6 +1,6 @@
 import { createRoute, redirect } from "@tanstack/react-router";
 import { rootRoute } from "../../../router.root";
-import { useAuthStore } from "../../auth";
+import { useAuthStore } from "../../auth/store/authStore";
 import Checkout from "../components/Checkout";
 
 export const Route = createRoute({

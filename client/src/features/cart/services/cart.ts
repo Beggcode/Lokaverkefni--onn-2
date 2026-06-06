@@ -1,8 +1,6 @@
 import { cartResponseSchema } from "@ntv/shared";
 import { apiFetchJson } from "../../../shared/lib/apiFetch";
 
-export type { Cart, CartItem } from "@ntv/shared";
-
 export async function getCart() {
 	const data = await apiFetchJson(cartResponseSchema, "/api/cart");
 	return data.cart;
@@ -11,7 +9,7 @@ export async function getCart() {
 export async function addToCart(variantId: number, quantity: number) {
 	const data = await apiFetchJson(cartResponseSchema, "/api/cart/items", {
 		method: "POST",
-		body: JSON.stringify({ variantId, quantity }),
+		json: { variantId, quantity },
 	});
 	return data.cart;
 }
@@ -29,10 +27,7 @@ export async function updateCartItem(itemId: number, quantity: number) {
 	const data = await apiFetchJson(
 		cartResponseSchema,
 		`/api/cart/items/${itemId}`,
-		{
-			method: "PATCH",
-			body: JSON.stringify({ quantity }),
-		},
+		{ method: "PATCH", json: { quantity } },
 	);
 	return data.cart;
 }

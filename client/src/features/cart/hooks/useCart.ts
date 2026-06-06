@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useToastStore } from "../../ui/store/toastStore";
+import { useToast } from "../../../shared/hooks/useToast";
 import { getCart, removeFromCart, updateCartItem } from "../services/cart";
 
 export function useCart() {
 	const queryClient = useQueryClient();
-	const showToast = useToastStore((s) => s.showToast);
+	const showToast = useToast();
 
 	const query = useQuery({ queryKey: ["cart"], queryFn: getCart });
 

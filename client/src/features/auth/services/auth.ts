@@ -6,7 +6,7 @@ export type { User };
 export async function loginUser(email: string, password: string) {
 	const data = await apiFetchJson(userResponseSchema, "/api/auth/login", {
 		method: "POST",
-		body: JSON.stringify({ email, password }),
+		json: { email, password },
 	});
 	return data.user;
 }
@@ -18,7 +18,7 @@ export async function registerUser(
 ) {
 	const data = await apiFetchJson(userResponseSchema, "/api/auth/register", {
 		method: "POST",
-		body: JSON.stringify({ name, email, password }),
+		json: { name, email, password },
 	});
 	return data.user;
 }

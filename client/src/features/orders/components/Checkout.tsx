@@ -1,37 +1,20 @@
-import {
-	DefaultCreditCardDelimiter,
-	formatCreditCard,
-	formatDate,
-	getCreditCardType,
-	registerCursorTracker,
-} from "cleave-zen";
-import { useEffect, useRef, useState } from "react";
 import { formatSize } from "../../../shared/lib/formatSize";
 import { useCart } from "../../cart/hooks/useCart";
 import { useCheckout } from "../hooks/useCheckout";
-import { checkoutFormSchema } from "../lib/checkoutSchema";
+import PaymentForm from "./PaymentForm";
+import styles from "../styling/Checkout.module.css";
+
+type CartItem = NonNullable<
+	ReturnType<typeof useCart>["data"]
+>["items"][number];
+
+function itemTotal(item: CartItem) {
+	return item.variant.product.price * item.quantity;
+}
 
 export default function Checkout() {
 	const { data: cart, isPending, error } = useCart();
 	const place = useCheckout();
-
-	const [form, setForm] = useState({
-		name: "",
-		cardNumber: "",
-		expiry: "",
-		cvv: "",
-	});
-	const [cardType, setCardType] = useState("");
-	const [formError, setFormError] = useState("");
-	const cardInputRef = useRef<HTMLInputElement>(null);
-
-	useEffect(() => {
-		if (!cardInputRef.current) return;
-		return registerCursorTracker({
-			input: cardInputRef.current,
-			delimiter: DefaultCreditCardDelimiter,
-		});
-	}, []);
 
 	if (isPending) return <p>Loading…</p>;
 	if (error) return <p role="alert">{error.message}</p>;
@@ -39,99 +22,32 @@ export default function Checkout() {
 
 	let total = 0;
 	for (const item of cart.items) {
-		total += item.variant.product.price * item.quantity;
-	}
-
-	function handleSubmit() {
-		setFormError("");
-		const result = checkoutFormSchema.safeParse(form);
-		if (!result.success) {
-			setFormError(result.error.issues[0].message);
-			return;
-		}
-		place.mutate();
+		total += itemTotal(item);
 	}
 
 	return (
-		<div>
-			<h1>Checkout</h1>
-			<section>
-				<h2>Order summary</h2>
-				<ul>
-					{cart.items.map((item) => (
-						<li key={item.id}>
-							{item.variant.product.name} — {formatSize(item.variant)} ×{" "}
-							{item.quantity} —{" "}
-							{(item.variant.product.price * item.quantity).toLocaleString()} kr
-						</li>
-					))}
-				</ul>
-				<strong>Total: {total.toLocaleString()} kr</strong>
-			</section>
-			<section>
-				<h2>Payment details</h2>
-				<form
-					onSubmit={(e) => {
-						e.preventDefault();
-						handleSubmit();
-					}}
-				>
-					<label>
-						Name on card
-						<input
-							required
-							value={form.name}
-							onChange={(e) => setForm({ ...form, name: e.target.value })}
-						/>
-					</label>
-					<label>
-						Card number {cardType && <span>({cardType})</span>}
-						<input
-							ref={cardInputRef}
-							required
-							maxLength={19}
-							placeholder="1234 5678 9012 3456"
-							value={form.cardNumber}
-							onChange={(e) => {
-								const formatted = formatCreditCard(e.target.value);
-								setCardType(getCreditCardType(e.target.value));
-								setForm({ ...form, cardNumber: formatted });
-							}}
-						/>
-					</label>
-					<label>
-						Expiry
-						<input
-							required
-							maxLength={5}
-							placeholder="MM/YY"
-							value={form.expiry}
-							onChange={(e) =>
-								setForm({
-									...form,
-									expiry: formatDate(e.target.value, {
-										datePattern: ["m", "y"],
-									}),
-								})
-							}
-						/>
-					</label>
-					<label>
-						CVV
-						<input
-							required
-							maxLength={4}
-							placeholder="123"
-							value={form.cvv}
-							onChange={(e) => setForm({ ...form, cvv: e.target.value })}
-						/>
-					</label>
-					{formError && <p role="alert">{formError}</p>}
-					<button type="submit" disabled={place.isPending}>
-						{place.isPending ? "Placing order…" : "Place order"}
-					</button>
-				</form>
-			</section>
+		<div className={styles.container}>
+			<h1 className={styles.title}>Checkout</h1>
+			<div className={styles.layout}>
+				<section>
+					<h2 className={styles.sectionTitle}>Order summary</h2>
+					<ul className={styles.orderList}>
+						{cart.items.map((item) => (
+							<li key={item.id} className={styles.orderItem}>
+								{item.variant.product.name} — {formatSize(item.variant)} ×{" "}
+								{item.quantity} — {itemTotal(item).toLocaleString()} kr
+							</li>
+						))}
+					</ul>
+					<strong className={styles.total}>
+						Total: {total.toLocaleString()} kr
+					</strong>
+				</section>
+				<section>
+					<h2 className={styles.sectionTitle}>Payment details</h2>
+					<PaymentForm onSubmit={place.mutate} isPending={place.isPending} />
+				</section>
+			</div>
 		</div>
 	);
 }

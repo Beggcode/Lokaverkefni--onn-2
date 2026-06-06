@@ -1,3 +1,3 @@
-export { loginUser, registerUser, logoutUser, fetchMe } from "./services/auth";
-export { useAuthStore } from "./store/authStore";
+export { useAuth } from "./hooks/useAuth";
+export { fetchMe, loginUser, logoutUser, registerUser } from "./services/auth";
 export type { User } from "./services/auth";

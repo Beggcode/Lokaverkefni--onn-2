@@ -1,0 +1,58 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.field label {
+	font-family: Inter, sans-serif;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.field input {
+	padding: 10px 14px;
+	border: 1px solid lightgray;
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	outline: none;
+}
+
+.field input:focus {
+	border-color: black;
+}
+
+.row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+}
+
+.error {
+	font-family: Inter, sans-serif;
+	font-size: 13px;
+	color: red;
+	margin: 0;
+}
+
+.submitButton {
+	padding: 14px;
+	background: black;
+	color: white;
+	border: none;
+	cursor: pointer;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 18px;
+	letter-spacing: 0.05em;
+}
+
+.submitButton:disabled {
+	background: lightgray;
+	cursor: not-allowed;
+}

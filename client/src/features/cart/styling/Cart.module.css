@@ -1,0 +1,116 @@
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 40px 32px;
+}
+
+.title {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 2rem;
+	margin: 0 0 32px 0;
+}
+
+.list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.item {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 16px 0;
+	border-bottom: 1px solid lightgray;
+}
+
+.itemInfo {
+	flex: 1;
+}
+
+.itemName {
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	margin-bottom: 4px;
+}
+
+.itemPrice {
+	font-family: Inter, sans-serif;
+	font-size: 13px;
+	color: #666;
+}
+
+.controls {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.qtyButton {
+	width: 28px;
+	height: 28px;
+	border: 1px solid lightgray;
+	background: white;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+.qtyButton:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.qty {
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	min-width: 20px;
+	text-align: center;
+}
+
+.removeButton {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-family: Inter, sans-serif;
+	font-size: 13px;
+	color: #666;
+	text-decoration: underline;
+}
+
+.empty {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 1.5rem;
+	color: #666;
+}
+
+.footer {
+	margin-top: 32px;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.checkoutLink {
+	background: black;
+	color: white;
+	padding: 14px 32px;
+	text-decoration: none;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 18px;
+	letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+	.container {
+		padding: 24px 16px;
+	}
+
+	.item {
+		flex-wrap: wrap;
+	}
+
+	.controls {
+		width: 100%;
+		justify-content: space-between;
+	}
+}

@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { formatSize } from "../../../shared/lib/formatSize";
 import { useAddToCart } from "../../cart/hooks/useAddToCart";
 import { useProduct } from "../hooks/useProduct";
-import { addRecentlyViewed } from "../hooks/useRecentlyViewed";
+import { useRecentlyViewed } from "../hooks/useRecentlyViewed";
 import { Route } from "../pages/product.route";
+import styles from "../styling/ProductDetail.module.css";
 
 export default function ProductDetail() {
 	const { productId: productIdStr } = Route.useParams();
@@ -12,6 +13,7 @@ export default function ProductDetail() {
 
 	const { data: product, isPending, error } = useProduct(productId);
 	const add = useAddToCart();
+	const { add: trackProduct } = useRecentlyViewed();
 
 	const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
 	const [quantity, setQuantity] = useState(1);
@@ -25,8 +27,8 @@ export default function ProductDetail() {
 	}
 
 	useEffect(() => {
-		if (product) addRecentlyViewed({ id: product.id, name: product.name });
-	}, [product]);
+		if (product) trackProduct({ id: product.id, name: product.name });
+	}, [product, trackProduct]);
 
 	if (isPending) return <p>Loading…</p>;
 	if (error) return <p role="alert">{error.message}</p>;
@@ -35,55 +37,68 @@ export default function ProductDetail() {
 	const maxQty = variant?.stock ?? 1;
 
 	return (
-		<div>
-			{product.imageUrl && <img src={product.imageUrl} alt={product.name} />}
-			<h1>{product.name}</h1>
-			<p>
-				{product.category.name} — {product.season}
-			</p>
-			{product.description && <p>{product.description}</p>}
-			<p>
-				<strong>{product.price} kr</strong>
-			</p>
+		<div className={styles.container}>
+			<div className={styles.layout}>
+				{product.imageUrl && (
+					<div className={styles.imageWrapper}>
+						<img
+							src={product.imageUrl}
+							alt={product.name}
+							className={styles.image}
+						/>
+					</div>
+				)}
+				<div className={styles.info}>
+					<h1 className={styles.name}>{product.name}</h1>
+					<p className={styles.meta}>
+						{product.category.name} — {product.season}
+					</p>
+					{product.description && (
+						<p className={styles.description}>{product.description}</p>
+					)}
+					<p className={styles.price}>{product.price.toLocaleString()} kr</p>
 
-			{product.variants.length > 0 && (
-				<div>
-					<label htmlFor="variant">Variant</label>
-					<select
-						id="variant"
-						value={variant?.id}
-						onChange={(e) => handleVariantChange(Number(e.target.value))}
+					{product.variants.length > 0 && (
+						<div className={styles.field}>
+							<label htmlFor="variant">Size</label>
+							<select
+								id="variant"
+								value={variant?.id}
+								onChange={(e) => handleVariantChange(Number(e.target.value))}
+							>
+								{product.variants.map((v) => (
+									<option key={v.id} value={v.id} disabled={v.stock === 0}>
+										{formatSize(v)}{" "}
+										{v.stock === 0 ? "(out of stock)" : `(${v.stock} left)`}
+									</option>
+								))}
+							</select>
+						</div>
+					)}
+
+					<div className={styles.field}>
+						<label htmlFor="quantity">Quantity</label>
+						<input
+							id="quantity"
+							type="number"
+							min={1}
+							max={maxQty}
+							value={quantity}
+							onChange={(e) =>
+								setQuantity(Math.min(Number(e.target.value), maxQty))
+							}
+						/>
+					</div>
+
+					<button
+						className={styles.addButton}
+						onClick={() => add.mutate({ variantId: variant.id, quantity })}
+						disabled={add.isPending || !variant || variant.stock === 0}
 					>
-						{product.variants.map((v) => (
-							<option key={v.id} value={v.id} disabled={v.stock === 0}>
-								{formatSize(v)}{" "}
-								{v.stock === 0 ? "(out of stock)" : `(${v.stock} left)`}
-							</option>
-						))}
-					</select>
+						{add.isPending ? "Adding…" : "Add to cart"}
+					</button>
 				</div>
-			)}
-
-			<div>
-				<label htmlFor="quantity">Quantity</label>
-				<input
-					id="quantity"
-					type="number"
-					min={1}
-					max={maxQty}
-					value={quantity}
-					onChange={(e) =>
-						setQuantity(Math.min(Number(e.target.value), maxQty))
-					}
-				/>
 			</div>
-
-			<button
-				onClick={() => add.mutate({ variantId: variant.id, quantity })}
-				disabled={add.isPending || !variant || variant.stock === 0}
-			>
-				{add.isPending ? "Adding…" : "Add to cart"}
-			</button>
 		</div>
 	);
 }
