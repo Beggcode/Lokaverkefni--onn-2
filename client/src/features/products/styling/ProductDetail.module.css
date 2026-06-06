@@ -7,8 +7,8 @@
 .layout {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 48px;
-	align-items: start;
+	gap: 100px;
+	align-items: stretch;
 }
 
 .imageWrapper {
@@ -27,12 +27,13 @@
 .info {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: 24px;
+	justify-content: space-between;
 }
 
 .name {
 	font-family: "Bebas Neue", sans-serif;
-	font-size: 2.5rem;
+	font-size: 5rem;
 	margin: 0;
 }
 
@@ -77,6 +78,38 @@
 	font-size: 14px;
 	background: white;
 	outline: none;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.qtyControl {
+	display: flex;
+	align-items: center;
+	border: 1px solid lightgray;
+}
+
+.qtyButton {
+	width: 40px;
+	height: 40px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 18px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.qtyButton:disabled {
+	opacity: 0.3;
+	cursor: not-allowed;
+}
+
+.qtyValue {
+	flex: 1;
+	text-align: center;
+	font-family: Inter, sans-serif;
+	font-size: 14px;
 }
 
 .field select:focus,

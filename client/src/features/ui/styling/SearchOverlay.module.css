@@ -1,0 +1,72 @@
+.trigger {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+}
+
+.overlay {
+	position: fixed;
+	inset: 0;
+	background: white;
+}
+
+.content {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding: 24px 32px;
+}
+
+@media (max-width: 768px) {
+	.content {
+		padding: 24px 16px;
+	}
+}
+
+.searchBar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	border-bottom: 1px solid;
+	padding-bottom: 16px;
+}
+
+.searchInput {
+	flex: 1;
+	min-width: 0;
+	border: none;
+	outline: none;
+	font-size: 16px;
+	font-family: Inter, sans-serif;
+	background: transparent;
+}
+
+.cancel {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	flex-shrink: 0;
+}
+
+.recentlyViewed {
+	margin-top: 24px;
+}
+
+.recentlyViewedLabel {
+	font-family: Inter, sans-serif;
+	font-size: 13px;
+	font-weight: 600;
+	margin-bottom: 12px;
+}
+
+.recentlyViewedLink {
+	display: block;
+	padding: 8px 0;
+	text-decoration: none;
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+}

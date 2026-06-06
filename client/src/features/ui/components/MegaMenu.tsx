@@ -1,7 +1,9 @@
 import { type Season } from "@ntv/shared";
+import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
 import { useProducts } from "../../products/hooks/useProducts";
+import { uniqueCategories } from "../../products/lib/uniqueCategories";
+import styles from "../styling/MegaMenu.module.css";
 
 const SEASONS: { label: string; value: Season }[] = [
 	{ label: "Spring", value: "SPRING" },
@@ -11,112 +13,76 @@ const SEASONS: { label: string; value: Season }[] = [
 	{ label: "All Season", value: "ALL_SEASON" },
 ];
 
-const linkStyle = {
-	display: "block",
-	padding: "6px 0",
-	textDecoration: "none",
-	fontFamily: "Bebas Neue, sans-serif",
-	fontSize: "18px",
-	textAlign: "center" as const,
-};
-
-const triggerStyle = {
-	background: "none",
-	border: "none",
-	cursor: "pointer",
-	fontFamily: "Bebas Neue, sans-serif",
-	fontSize: "22px",
-	color: "black",
-	padding: 0,
-};
-
-type MenuItem = "category" | "season" | "newvibes" | null;
-
 export default function MegaMenu() {
-	const [open, setOpen] = useState<MenuItem>(null);
 	const { data: allProducts } = useProducts();
 	const { data: newVibes } = useProducts({ limit: 3 });
 
 	const categories = allProducts
-		? [
-				...new Map(
-					allProducts.map((p) => [p.category.id, p.category]),
-				).values(),
-			].sort((a, b) => a.id - b.id)
+		? uniqueCategories(allProducts).sort((a, b) => a.id - b.id)
 		: [];
 
 	return (
-		<div
-			style={{ display: "flex", gap: "32px", position: "relative" }}
-			onMouseLeave={() => setOpen(null)}
-		>
-			<button style={triggerStyle} onMouseEnter={() => setOpen("category")}>
-				Category
-			</button>
-			<button style={triggerStyle} onMouseEnter={() => setOpen("season")}>
-				Season
-			</button>
-			<button style={triggerStyle} onMouseEnter={() => setOpen("newvibes")}>
-				New Vibes
-			</button>
-
-			{open && (
-				<div
-					style={{
-						position: "absolute",
-						top: "100%",
-						left: 0,
-						right: 0,
-						background: "white",
-						padding: "0 4px 4px 4px",
-					}}
-				>
-					<div
-						style={{
-							marginTop: "19px",
-							borderLeft: "2.5px solid black",
-							borderRight: "2.5px solid black",
-							borderBottom: "2.5px solid black",
-							padding: "16px 0",
-							textAlign: "center",
-						}}
-					>
-						{open === "category" &&
-							categories.map((c) => (
+		<NavigationMenu.Root className={styles.root}>
+			<NavigationMenu.List className={styles.list}>
+				<NavigationMenu.Item>
+					<NavigationMenu.Trigger className={styles.trigger}>
+						Category
+					</NavigationMenu.Trigger>
+					<NavigationMenu.Content className={styles.content}>
+						{categories.map((c) => (
+							<NavigationMenu.Link key={c.id} asChild>
 								<Link
-									key={c.id}
 									to="/products"
 									search={{ categoryId: c.id }}
-									style={linkStyle}
+									className={styles.link}
 								>
 									{c.name}
 								</Link>
-							))}
-						{open === "season" &&
-							SEASONS.map((s) => (
+							</NavigationMenu.Link>
+						))}
+					</NavigationMenu.Content>
+				</NavigationMenu.Item>
+
+				<NavigationMenu.Item>
+					<NavigationMenu.Trigger className={styles.trigger}>
+						Season
+					</NavigationMenu.Trigger>
+					<NavigationMenu.Content className={styles.content}>
+						{SEASONS.map((s) => (
+							<NavigationMenu.Link key={s.value} asChild>
 								<Link
-									key={s.value}
 									to="/products"
 									search={{ season: s.value }}
-									style={linkStyle}
+									className={styles.link}
 								>
 									{s.label}
 								</Link>
-							))}
-						{open === "newvibes" &&
-							newVibes?.map((p) => (
+							</NavigationMenu.Link>
+						))}
+					</NavigationMenu.Content>
+				</NavigationMenu.Item>
+
+				<NavigationMenu.Item>
+					<NavigationMenu.Trigger className={styles.trigger}>
+						New Vibes
+					</NavigationMenu.Trigger>
+					<NavigationMenu.Content className={styles.content}>
+						{newVibes?.map((p) => (
+							<NavigationMenu.Link key={p.id} asChild>
 								<Link
-									key={p.id}
 									to="/products/$productId"
 									params={{ productId: String(p.id) }}
-									style={linkStyle}
+									className={styles.link}
 								>
 									{p.name}
 								</Link>
-							))}
-					</div>
-				</div>
-			)}
-		</div>
+							</NavigationMenu.Link>
+						))}
+					</NavigationMenu.Content>
+				</NavigationMenu.Item>
+			</NavigationMenu.List>
+
+			<NavigationMenu.Viewport className={styles.viewport} />
+		</NavigationMenu.Root>
 	);
 }

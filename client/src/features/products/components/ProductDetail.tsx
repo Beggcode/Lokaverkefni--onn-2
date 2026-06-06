@@ -51,7 +51,8 @@ export default function ProductDetail() {
 				<div className={styles.info}>
 					<h1 className={styles.name}>{product.name}</h1>
 					<p className={styles.meta}>
-						{product.category.name} — {product.season}
+						{product.category.name.toUpperCase()} &nbsp;—&nbsp;{" "}
+						{product.season.replace("_", " ")}
 					</p>
 					{product.description && (
 						<p className={styles.description}>{product.description}</p>
@@ -77,17 +78,24 @@ export default function ProductDetail() {
 					)}
 
 					<div className={styles.field}>
-						<label htmlFor="quantity">Quantity</label>
-						<input
-							id="quantity"
-							type="number"
-							min={1}
-							max={maxQty}
-							value={quantity}
-							onChange={(e) =>
-								setQuantity(Math.min(Number(e.target.value), maxQty))
-							}
-						/>
+						<label>Quantity</label>
+						<div className={styles.qtyControl}>
+							<button
+								className={styles.qtyButton}
+								onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+								disabled={quantity <= 1}
+							>
+								−
+							</button>
+							<span className={styles.qtyValue}>{quantity}</span>
+							<button
+								className={styles.qtyButton}
+								onClick={() => setQuantity((q) => Math.min(maxQty, q + 1))}
+								disabled={quantity >= maxQty}
+							>
+								+
+							</button>
+						</div>
 					</div>
 
 					<button

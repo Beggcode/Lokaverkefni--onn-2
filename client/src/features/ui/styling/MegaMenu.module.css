@@ -1,0 +1,77 @@
+.root {
+	display: flex;
+	position: relative;
+	align-items: center;
+}
+
+.list {
+	display: flex;
+	gap: 32px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.trigger {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 22px;
+	color: black;
+	padding: 0;
+}
+
+.viewport {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	background: white;
+	padding: 0 4px 4px 4px;
+	overflow: hidden;
+}
+
+.viewport[data-state="closed"] {
+	display: none;
+}
+
+.content {
+	margin-top: 19px;
+	border-left: 2.5px solid black;
+	border-right: 2.5px solid black;
+	border-bottom: 2.5px solid black;
+	padding: 16px 0;
+	text-align: center;
+}
+
+.link {
+	display: block;
+	padding: 6px 0;
+	text-decoration: none;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 18px;
+	text-align: center;
+}
+
+@media (max-width: 768px) {
+	.list {
+		gap: 16px;
+	}
+
+	.trigger {
+		font-size: 16px;
+	}
+
+	.viewport {
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 100vw;
+	}
+
+	.content {
+		margin-top: 0;
+	}
+}
