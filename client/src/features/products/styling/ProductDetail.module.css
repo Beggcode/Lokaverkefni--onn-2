@@ -38,10 +38,17 @@
 }
 
 .meta {
+	display: flex;
+	gap: 8px;
 	font-family: Inter, sans-serif;
 	font-size: 14px;
 	color: #666;
 	margin: 0;
+}
+
+.meta span + span::before {
+	content: "—";
+	margin-right: 8px;
 }
 
 .description {

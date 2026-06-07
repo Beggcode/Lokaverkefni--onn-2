@@ -23,6 +23,7 @@ export const productSchema = z.object({
 	id: z.number(),
 	name: z.string(),
 	description: z.string().nullable(),
+	type: z.string().nullable(),
 	price: z.number(),
 	imageUrl: z.string().nullable(),
 	season: seasonSchema,

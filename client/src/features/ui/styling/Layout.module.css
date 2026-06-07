@@ -1,0 +1,103 @@
+.nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 32px;
+	height: 64px;
+	border-bottom: 1px solid lightgray;
+	background: white;
+	position: sticky;
+	top: 0;
+}
+
+.navCenter {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	gap: 32px;
+}
+
+.navRight {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.logo {
+	height: 36px;
+}
+
+.avatarButton {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+}
+
+.avatar {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: lightgray;
+}
+
+.avatarFallback {
+	font-size: 13px;
+	font-family: Inter, sans-serif;
+	font-weight: 600;
+}
+
+.dropdownContent {
+	background: white;
+	border: 2px solid black;
+	padding: 4px;
+	min-width: 140px;
+}
+
+.dropdownLabel {
+	padding: 6px 12px;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 20px;
+	color: black;
+}
+
+.dropdownSeparator {
+	height: 1px;
+	background: lightgray;
+	margin: 4px;
+}
+
+.dropdownItem {
+	padding: 8px 12px;
+	cursor: pointer;
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	border-radius: 2px;
+	outline: none;
+}
+
+.dropdownItem[data-highlighted] {
+	background: black;
+	color: white;
+}
+
+@media (max-width: 768px) {
+	.nav {
+		flex-wrap: wrap;
+		height: auto;
+		padding: 0 16px;
+	}
+
+	.navCenter {
+		order: 3;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid lightgray;
+		padding: 8px 0;
+	}
+}

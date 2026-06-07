@@ -32,6 +32,7 @@ model Product {
   description String?
   price       Float
   imageUrl    String?
+  type        String?
   season      Season
   createdAt   DateTime @default(now())
 

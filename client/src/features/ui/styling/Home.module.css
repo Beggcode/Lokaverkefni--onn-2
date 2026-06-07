@@ -1,0 +1,177 @@
+.page {
+	display: flex;
+	flex-direction: column;
+}
+
+.banner {
+	background-size: cover;
+	background-position: center;
+	height: 60vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.title {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 5rem;
+	color: white;
+	margin: 0;
+}
+
+.shopLink {
+	margin-top: 20px;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 1.1rem;
+	color: white;
+	text-decoration: none;
+	letter-spacing: 0.15em;
+	border-bottom: 1px solid white;
+	padding-bottom: 2px;
+}
+
+.statement {
+	padding: 48px 32px 32px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border-bottom: 1px solid lightgray;
+}
+
+.statementText {
+	font-family: Inter, sans-serif;
+	font-size: 1.2rem;
+	line-height: 1.8;
+	color: #333;
+	margin: 0;
+	max-width: 720px;
+}
+
+.statementLogo {
+	height: 60px;
+	margin-top: 20px;
+}
+
+.sectionWrapper {
+	border-bottom: 1px solid lightgray;
+}
+
+.section {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 40px 32px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.sectionTitle {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 3rem;
+	margin: 0 0 32px 0;
+	text-align: center;
+}
+
+.productGrid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 24px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.productLink {
+	text-decoration: none;
+	color: inherit;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.productImageWrapper {
+	border: 1.5px solid black;
+	padding: 1px;
+	background: white;
+	aspect-ratio: 3 / 4;
+	display: flex;
+}
+
+.productImage {
+	width: 100%;
+	object-fit: cover;
+}
+
+.productName {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 18px;
+}
+
+.productPrice {
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.categoryGrid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.categoryTile {
+	display: block;
+	border: 1.5px solid black;
+	padding: 24px 16px;
+	text-align: center;
+	text-decoration: none;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 1.2rem;
+	color: black;
+	letter-spacing: 0.05em;
+}
+
+.categoryTile:hover {
+	background: black;
+	color: white;
+}
+
+@media (max-width: 1024px) {
+	.productGrid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.categoryGrid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media (max-width: 768px) {
+	.title {
+		font-size: 2.5rem;
+	}
+
+	.statement {
+		padding: 40px 24px 28px;
+	}
+
+	.statementText {
+		font-size: 1rem;
+	}
+
+	.section {
+		padding: 0 16px 48px;
+	}
+
+	.productGrid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 16px;
+	}
+
+	.categoryGrid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
