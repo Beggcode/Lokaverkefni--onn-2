@@ -1,0 +1,63 @@
+.toast {
+	background: white;
+	border: 1px solid lightgray;
+	outline: 1px solid lightgray;
+	outline-offset: -8px;
+	border-radius: 8px;
+	padding: 16px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.toastHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.title {
+	font-size: 16px;
+	font-weight: 600;
+	font-family: Inter, sans-serif;
+}
+
+.titleSuccess {
+	color: green;
+}
+
+.titleError {
+	color: red;
+}
+
+.closeButton {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	color: gray;
+	display: flex;
+	align-items: center;
+}
+
+.description {
+	font-size: 14px;
+	font-family: Inter, sans-serif;
+	color: black;
+	margin: 0;
+}
+
+.viewport {
+	position: fixed;
+	bottom: 24px;
+	left: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	width: 360px;
+	max-width: 90vw;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}

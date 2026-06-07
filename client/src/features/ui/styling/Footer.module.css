@@ -1,0 +1,153 @@
+.footer {
+	background: black;
+	color: white;
+	margin-top: auto;
+}
+
+.inner {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 48px 32px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 48px;
+	align-items: start;
+}
+
+.brand {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.logo {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 2rem;
+	letter-spacing: 0.05em;
+}
+
+.tagline {
+	font-family: Inter, sans-serif;
+	font-size: 13px;
+	color: #999;
+	margin: 0;
+}
+
+.links {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.link {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 18px;
+	color: white;
+	text-decoration: none;
+	letter-spacing: 0.05em;
+}
+
+.link:hover {
+	color: #999;
+}
+
+.newsletter {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.newsletterLabel {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 18px;
+	letter-spacing: 0.05em;
+	margin: 0;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.input {
+	background: none;
+	border: none;
+	border-bottom: 1px solid #555;
+	color: white;
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	padding: 8px 0;
+	outline: none;
+	width: 100%;
+}
+
+.input::placeholder {
+	color: #555;
+}
+
+.input:focus {
+	border-bottom-color: white;
+}
+
+.error {
+	font-family: Inter, sans-serif;
+	font-size: 12px;
+	color: #ff6b6b;
+}
+
+.submit {
+	background: white;
+	color: black;
+	border: none;
+	cursor: pointer;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 16px;
+	letter-spacing: 0.05em;
+	padding: 10px 24px;
+	align-self: flex-start;
+	margin-top: 4px;
+}
+
+.submit:hover {
+	background: #ddd;
+}
+
+.successMessage {
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	color: #999;
+	margin: 0;
+}
+
+.bottom {
+	border-top: 1px solid #222;
+	padding: 16px 32px;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.bottom p {
+	font-family: Inter, sans-serif;
+	font-size: 12px;
+	color: #555;
+	margin: 0;
+}
+
+@media (max-width: 768px) {
+	.inner {
+		grid-template-columns: 1fr;
+		gap: 32px;
+		padding: 32px 16px;
+	}
+
+	.bottom {
+		padding: 16px;
+	}
+}
