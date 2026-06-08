@@ -1,6 +1,6 @@
 import type { Variant } from "@ntv/shared";
-import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { RecentlyViewedList } from "../../../shared/components/RecentlyViewedList";
 import { formatSize } from "../../../shared/lib/formatSize";
 import { useAddToCart } from "../../cart/hooks/useAddToCart";
 import { useProduct } from "../hooks/useProduct";
@@ -64,72 +64,63 @@ export default function ProductDetail() {
 						<p className={styles.price}>{product.price.toLocaleString()} kr</p>
 
 						{product.variants.length > 0 && (
-							<div className={styles.field}>
-								<label htmlFor="variant">Size</label>
-								<select
-									id="variant"
-									value={variant?.id}
-									onChange={(e) => handleVariantChange(Number(e.target.value))}
+							<>
+								<div className={styles.field}>
+									<label htmlFor="variant">Size</label>
+									<select
+										id="variant"
+										value={variant?.id}
+										onChange={(e) =>
+											handleVariantChange(Number(e.target.value))
+										}
+									>
+										{product.variants.map((v) => (
+											<option key={v.id} value={v.id} disabled={v.stock === 0}>
+												{formatSize(v)}{" "}
+												{v.stock === 0 ? "(out of stock)" : `(${v.stock} left)`}
+											</option>
+										))}
+									</select>
+								</div>
+
+								<div className={styles.field}>
+									<label>Quantity</label>
+									<div className={styles.qtyControl}>
+										<button
+											className={styles.qtyButton}
+											onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+											disabled={quantity <= 1}
+										>
+											−
+										</button>
+										<span className={styles.qtyValue}>{quantity}</span>
+										<button
+											className={styles.qtyButton}
+											onClick={() =>
+												setQuantity((q) => Math.min(maxQty, q + 1))
+											}
+											disabled={quantity >= maxQty}
+										>
+											+
+										</button>
+									</div>
+								</div>
+
+								<button
+									className={styles.addButton}
+									onClick={() =>
+										add.mutate({ variantId: variant!.id, quantity })
+									}
+									disabled={add.isPending || !variant || variant.stock === 0}
 								>
-									{product.variants.map((v) => (
-										<option key={v.id} value={v.id} disabled={v.stock === 0}>
-											{formatSize(v)}{" "}
-											{v.stock === 0 ? "(out of stock)" : `(${v.stock} left)`}
-										</option>
-									))}
-								</select>
-							</div>
+									{add.isPending ? "Adding…" : "Add to cart"}
+								</button>
+							</>
 						)}
-
-						<div className={styles.field}>
-							<label>Quantity</label>
-							<div className={styles.qtyControl}>
-								<button
-									className={styles.qtyButton}
-									onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-									disabled={quantity <= 1}
-								>
-									−
-								</button>
-								<span className={styles.qtyValue}>{quantity}</span>
-								<button
-									className={styles.qtyButton}
-									onClick={() => setQuantity((q) => Math.min(maxQty, q + 1))}
-									disabled={quantity >= maxQty}
-								>
-									+
-								</button>
-							</div>
-						</div>
-
-						<button
-							className={styles.addButton}
-							onClick={() => add.mutate({ variantId: variant.id, quantity })}
-							disabled={add.isPending || !variant || variant.stock === 0}
-						>
-							{add.isPending ? "Adding…" : "Add to cart"}
-						</button>
 					</div>
 				</div>
 			</div>
-			{recentlyViewed.length > 0 && (
-				<div className={styles.recentlyViewed}>
-					<h2 className={styles.recentlyViewedTitle}>Recently Viewed</h2>
-					<ul className={styles.recentlyViewedList}>
-						{recentlyViewed.map((p) => (
-							<li key={p.id}>
-								<Link
-									to="/products/$productId"
-									params={{ productId: String(p.id) }}
-									className={styles.recentlyViewedLink}
-								>
-									{p.name}
-								</Link>
-							</li>
-						))}
-					</ul>
-				</div>
-			)}
+			<RecentlyViewedList items={recentlyViewed} />
 		</>
 	);
 }

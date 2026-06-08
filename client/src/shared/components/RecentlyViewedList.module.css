@@ -1,0 +1,32 @@
+.section {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 40px 32px;
+	border-top: 1px solid lightgray;
+}
+
+.title {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 22px;
+	margin: 0 0 16px;
+}
+
+.list {
+	display: flex;
+	gap: 24px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	flex-wrap: wrap;
+}
+
+.link {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 20px;
+	text-decoration: none;
+	color: #666;
+}
+
+.link:hover {
+	color: black;
+}
