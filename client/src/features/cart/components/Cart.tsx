@@ -29,6 +29,9 @@ export default function Cart() {
 							<div className={styles.itemPrice}>
 								{item.variant.product.price.toLocaleString()} kr
 							</div>
+							{item.variant.stock === 0 && (
+								<div className={styles.outOfStock}>Out of stock</div>
+							)}
 						</div>
 						<div className={styles.controls}>
 							<button

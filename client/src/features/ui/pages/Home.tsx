@@ -17,8 +17,7 @@ export default function Home() {
 				<p className={styles.statementText}>
 					NTV was conceived during a silent retreat in a country we are not at
 					liberty to name. What emerged was not a brand. It was a frequency. You
-					are either on it or you are not. There is no judgment. There is
-					simplyok
+					are either on it or you are not. There is no judgment. There is simply
 				</p>
 				<img src={logo} alt="NTV" className={styles.statementLogo} />
 			</section>

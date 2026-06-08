@@ -1,3 +1,4 @@
+import { cartTotal } from "../../cart/lib/cartTotal";
 import { formatSize } from "../../../shared/lib/formatSize";
 import { useCart } from "../../cart/hooks/useCart";
 import { useCheckout } from "../hooks/useCheckout";
@@ -20,10 +21,7 @@ export default function Checkout() {
 	if (error) return <p role="alert">{error.message}</p>;
 	if (cart.items.length === 0) return <p>Your cart is empty.</p>;
 
-	let total = 0;
-	for (const item of cart.items) {
-		total += itemTotal(item);
-	}
+	const total = cartTotal(cart.items);
 
 	return (
 		<div className={styles.container}>

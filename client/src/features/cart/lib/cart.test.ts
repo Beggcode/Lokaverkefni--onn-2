@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { addToCartSchema, updateCartItemSchema } from "@ntv/shared";
+import { cartTotal } from "./cartTotal";
 
 describe("adding an item to the cart", () => {
 	it("works when variantId and quantity are provided", () => {
@@ -37,18 +38,10 @@ describe("cart total", () => {
 	];
 
 	it("sums up all items correctly", () => {
-		let total = 0;
-		for (const item of items) {
-			total += item.variant.product.price * item.quantity;
-		}
-		expect(total).toBe(92700);
+		expect(cartTotal(items)).toBe(92700);
 	});
 
 	it("is 0 when the cart is empty", () => {
-		let total = 0;
-		for (const item of [] as typeof items) {
-			total += item.variant.product.price * item.quantity;
-		}
-		expect(total).toBe(0);
+		expect(cartTotal([])).toBe(0);
 	});
 });

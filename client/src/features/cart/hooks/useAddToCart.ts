@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { handleError } from "../../../shared/lib/handleError";
 import { useToast } from "../../../shared/hooks/useToast";
 import { addToCart } from "../services/cart";
 
@@ -18,6 +19,6 @@ export function useAddToCart() {
 			queryClient.setQueryData(["cart"], updated);
 			showToast("Added to cart!", "success");
 		},
-		onError: (err: Error) => showToast(err.message, "error"),
+		onError: (err: Error) => handleError(err, showToast),
 	});
 }

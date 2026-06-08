@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { handleError } from "../../../shared/lib/handleError";
 import { useToast } from "../../../shared/hooks/useToast";
 import { checkout } from "../services/orders";
 
@@ -17,6 +18,6 @@ export function useCheckout() {
 				params: { orderId: String(order.id) },
 			});
 		},
-		onError: (err: Error) => showToast(err.message, "error"),
+		onError: (err: Error) => handleError(err, showToast),
 	});
 }

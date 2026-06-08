@@ -1,15 +1,9 @@
-import * as Form from "@radix-ui/react-form";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import styles from "../styling/Footer.module.css";
 
 export default function Footer() {
 	const [submitted, setSubmitted] = useState(false);
-
-	function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		setSubmitted(true);
-	}
 
 	return (
 		<footer className={styles.footer}>
@@ -35,25 +29,15 @@ export default function Footer() {
 							You're in. Expect transformation.
 						</p>
 					) : (
-						<Form.Root onSubmit={handleSubmit} className={styles.form}>
-							<Form.Field name="email" className={styles.field}>
-								<Form.Control asChild>
-									<input
-										type="email"
-										placeholder="your@email.com"
-										className={styles.input}
-										required
-									/>
-								</Form.Control>
-								<Form.Message match="valueMissing" className={styles.error}>
-									Email is required.
-								</Form.Message>
-								<Form.Message match="typeMismatch" className={styles.error}>
-									Enter a valid email.
-								</Form.Message>
-							</Form.Field>
-							<Form.Submit className={styles.submit}>Subscribe</Form.Submit>
-						</Form.Root>
+						<form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className={styles.form}>
+							<input
+								type="email"
+								placeholder="your@email.com"
+								className={styles.input}
+								required
+							/>
+							<button type="submit" className={styles.submit}>Subscribe</button>
+						</form>
 					)}
 				</div>
 			</div>
