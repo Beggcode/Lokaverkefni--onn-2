@@ -2,7 +2,6 @@ import {
 	DefaultCreditCardDelimiter,
 	formatCreditCard,
 	formatDate,
-	getCreditCardType,
 	registerCursorTracker,
 } from "cleave-zen";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
@@ -21,7 +20,6 @@ export default function PaymentForm({ onSubmit, isPending }: Props) {
 		expiry: "",
 		cvv: "",
 	});
-	const [cardType, setCardType] = useState("");
 	const [formError, setFormError] = useState("");
 	const cardInputRef = useRef<HTMLInputElement>(null);
 
@@ -38,7 +36,6 @@ export default function PaymentForm({ onSubmit, isPending }: Props) {
 	}
 
 	function handleCardNumber(e: ChangeEvent<HTMLInputElement>) {
-		setCardType(getCreditCardType(e.target.value));
 		setField("cardNumber", formatCreditCard(e.target.value));
 	}
 
@@ -68,7 +65,7 @@ export default function PaymentForm({ onSubmit, isPending }: Props) {
 				/>
 			</div>
 			<div className={styles.field}>
-				<label>Card number {cardType && <span>({cardType})</span>}</label>
+				<label>Card number</label>
 				<input
 					ref={cardInputRef}
 					required

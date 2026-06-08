@@ -56,3 +56,9 @@
 	background: lightgray;
 	cursor: not-allowed;
 }
+
+@media (max-width: 480px) {
+	.row {
+		grid-template-columns: 1fr;
+	}
+}
