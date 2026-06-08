@@ -12,16 +12,30 @@ export async function apiFetch(path: string, init?: ApiFetchInit) {
 	});
 }
 
+export class ApiError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "ApiError";
+	}
+}
+
 export async function apiFetchJson<T>(
 	schema: z.ZodType<T>,
 	path: string,
 	init?: ApiFetchInit,
 ): Promise<T> {
 	const res = await apiFetch(path, init);
-	const json = (await res.json()) as Record<string, unknown>;
+	let json: Record<string, unknown> = {};
+	try {
+		json = (await res.json()) as Record<string, unknown>;
+	} catch {
+		if (!res.ok) throw new ApiError("Something went wrong. Please try again.");
+	}
 	if (!res.ok)
-		throw new Error(
-			typeof json.error === "string" ? json.error : "Request failed",
+		throw new ApiError(
+			typeof json.error === "string"
+				? json.error
+				: "Something went wrong. Please try again.",
 		);
 	return schema.parse(json);
 }

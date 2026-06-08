@@ -1,18 +1,19 @@
+import cookieParser from "cookie-parser";
+import cors from "cors";
 import "dotenv/config";
 import express, {
+	type Application,
+	type NextFunction,
 	type Request,
 	type Response,
-	type NextFunction,
 } from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
+import { env } from "./lib/env.js";
 import authRoutes from "./routes/auth.routes.js";
-import productRoutes from "./routes/products.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import orderRoutes from "./routes/orders.routes.js";
-import { env } from "./lib/env.js";
+import productRoutes from "./routes/products.routes.js";
 
-const app = express();
+const app: Application = express();
 
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());

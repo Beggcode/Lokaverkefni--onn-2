@@ -18,9 +18,12 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = z.object({
-	name: z.string().min(1),
-	email: z.email(),
-	password: z.string().min(15).max(64),
+	name: z.string().min(1, "Name is required"),
+	email: z.email("Please enter a valid email"),
+	password: z
+		.string()
+		.min(15, "Password must be at least 15 characters")
+		.max(64, "Password must be under 64 characters"),
 });
 
 export const userResponseSchema = z.object({ user: userSchema });

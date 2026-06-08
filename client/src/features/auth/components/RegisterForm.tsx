@@ -1,12 +1,12 @@
 import { registerSchema, type User } from "@ntv/shared";
 import { useForm } from "@tanstack/react-form";
 import FieldError from "../../../shared/components/FieldError";
-import SubmitButton from "../../../shared/components/SubmitButton";
-import { createFormValidators } from "../../../shared/lib/createFormValidators";
-import { handleFormSubmit } from "../lib/formSubmit";
 import { useToast } from "../../../shared/hooks/useToast";
-import { errorMessage } from "../../../shared/lib/errorMessage";
+import { createFormValidators } from "../../../shared/lib/createFormValidators";
+import { handleError } from "../../../shared/lib/handleError";
+import { handleFormSubmit } from "../lib/formSubmit";
 import { registerUser } from "../services/auth";
+import styles from "../styling/Auth.module.css";
 
 type Props = { onSuccess: (user: User) => void };
 
@@ -26,61 +26,66 @@ export default function RegisterForm({ onSuccess }: Props) {
 				);
 				onSuccess(user);
 			} catch (err) {
-				showToast(errorMessage(err), "error");
+				handleError(err as Error, showToast);
 			}
 		},
 	});
 
 	return (
-		<form onSubmit={(e) => handleFormSubmit(e, form.handleSubmit)}>
-			<form.Field name="name" validators={{ onChange: validators.name }}>
+		<form
+			className={styles.form}
+			onSubmit={(e) => handleFormSubmit(e, form.handleSubmit)}
+		>
+			<form.Field name="name" validators={validators.name}>
 				{({ state, handleChange }) => (
-					<>
+					<div className={styles.field}>
 						<input
+							className={styles.input}
 							placeholder="Name"
 							value={state.value}
 							onChange={(e) => handleChange(e.target.value)}
 						/>
 						<FieldError errors={state.meta.errors} />
-					</>
+					</div>
 				)}
 			</form.Field>
-			<form.Field name="email" validators={{ onChange: validators.email }}>
+			<form.Field name="email" validators={validators.email}>
 				{({ state, handleChange }) => (
-					<>
+					<div className={styles.field}>
 						<input
+							className={styles.input}
 							type="email"
 							placeholder="Email"
 							value={state.value}
 							onChange={(e) => handleChange(e.target.value)}
 						/>
 						<FieldError errors={state.meta.errors} />
-					</>
+					</div>
 				)}
 			</form.Field>
-			<form.Field
-				name="password"
-				validators={{ onChange: validators.password }}
-			>
+			<form.Field name="password" validators={validators.password}>
 				{({ state, handleChange }) => (
-					<>
+					<div className={styles.field}>
 						<input
+							className={styles.input}
 							type="password"
 							placeholder="Password"
 							value={state.value}
 							onChange={(e) => handleChange(e.target.value)}
 						/>
 						<FieldError errors={state.meta.errors} />
-					</>
+					</div>
 				)}
 			</form.Field>
 			<form.Subscribe selector={(s) => s.isSubmitting}>
 				{(isSubmitting) => (
-					<SubmitButton
-						isSubmitting={isSubmitting}
-						label="Register"
-						loadingLabel="Registering…"
-					/>
+					<button
+						className={styles.submit}
+						type="submit"
+						disabled={isSubmitting}
+					>
+						{isSubmitting ? "Registering…" : "Register"}
+					</button>
 				)}
 			</form.Subscribe>
 		</form>

@@ -1,12 +1,12 @@
 import { loginSchema, type User } from "@ntv/shared";
 import { useForm } from "@tanstack/react-form";
 import FieldError from "../../../shared/components/FieldError";
-import SubmitButton from "../../../shared/components/SubmitButton";
-import { createFormValidators } from "../../../shared/lib/createFormValidators";
-import { handleFormSubmit } from "../lib/formSubmit";
 import { useToast } from "../../../shared/hooks/useToast";
-import { errorMessage } from "../../../shared/lib/errorMessage";
+import { createFormValidators } from "../../../shared/lib/createFormValidators";
+import { handleError } from "../../../shared/lib/handleError";
+import { handleFormSubmit } from "../lib/formSubmit";
 import { loginUser } from "../services/auth";
+import styles from "../styling/Auth.module.css";
 
 type Props = { onSuccess: (user: User) => void };
 
@@ -22,49 +22,53 @@ export default function LoginForm({ onSuccess }: Props) {
 				const user = await loginUser(value.email, value.password);
 				onSuccess(user);
 			} catch (err) {
-				showToast(errorMessage(err), "error");
+				handleError(err as Error, showToast);
 			}
 		},
 	});
 
 	return (
-		<form onSubmit={(e) => handleFormSubmit(e, form.handleSubmit)}>
-			<form.Field name="email" validators={{ onChange: validators.email }}>
+		<form
+			className={styles.form}
+			onSubmit={(e) => handleFormSubmit(e, form.handleSubmit)}
+		>
+			<form.Field name="email" validators={validators.email}>
 				{({ state, handleChange }) => (
-					<>
+					<div className={styles.field}>
 						<input
+							className={styles.input}
 							type="email"
 							placeholder="Email"
 							value={state.value}
 							onChange={(e) => handleChange(e.target.value)}
 						/>
 						<FieldError errors={state.meta.errors} />
-					</>
+					</div>
 				)}
 			</form.Field>
-			<form.Field
-				name="password"
-				validators={{ onChange: validators.password }}
-			>
+			<form.Field name="password" validators={validators.password}>
 				{({ state, handleChange }) => (
-					<>
+					<div className={styles.field}>
 						<input
+							className={styles.input}
 							type="password"
 							placeholder="Password"
 							value={state.value}
 							onChange={(e) => handleChange(e.target.value)}
 						/>
 						<FieldError errors={state.meta.errors} />
-					</>
+					</div>
 				)}
 			</form.Field>
 			<form.Subscribe selector={(s) => s.isSubmitting}>
 				{(isSubmitting) => (
-					<SubmitButton
-						isSubmitting={isSubmitting}
-						label="Login"
-						loadingLabel="Logging in…"
-					/>
+					<button
+						className={styles.submit}
+						type="submit"
+						disabled={isSubmitting}
+					>
+						{isSubmitting ? "Logging in…" : "Login"}
+					</button>
 				)}
 			</form.Subscribe>
 		</form>

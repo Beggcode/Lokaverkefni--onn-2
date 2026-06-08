@@ -3,12 +3,15 @@ import bcrypt from "bcryptjs";
 import { Router, type IRouter, type Response } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "../lib/env.js";
+import { isDuplicateKey } from "../lib/isDuplicateKey.js";
 import { parseBody } from "../lib/parse.js";
 import { prisma } from "../lib/prisma.js";
 import {
 	authenticate,
 	type AuthRequest,
 } from "../middleware/auth.middleware.js";
+
+const userSelect = { id: true, email: true, name: true } as const;
 
 const router: IRouter = Router();
 
@@ -26,13 +29,23 @@ function setAuthCookie(res: Response, userId: number) {
 router.post("/register", async (req, res) => {
 	const body = parseBody(registerSchema, req.body, res);
 	if (!body) return;
-	const hashed = await bcrypt.hash(body.password, 12);
-	const user = await prisma.user.create({
-		data: { email: body.email, password: hashed, name: body.name },
-		select: { id: true, email: true, name: true },
-	});
-	setAuthCookie(res, user.id);
-	res.status(201).json({ user });
+	try {
+		const hashed = await bcrypt.hash(body.password, 12);
+		const user = await prisma.user.create({
+			data: { email: body.email, password: hashed, name: body.name },
+			select: userSelect,
+		});
+		setAuthCookie(res, user.id);
+		res.status(201).json({ user });
+	} catch (err) {
+		if (isDuplicateKey(err)) {
+			res
+				.status(409)
+				.json({ error: "An account with this email already exists" });
+			return;
+		}
+		throw err;
+	}
 });
 
 router.post("/login", async (req, res) => {
@@ -55,7 +68,7 @@ router.post("/logout", (_req, res) => {
 router.get("/me", authenticate, async (req: AuthRequest, res) => {
 	const user = await prisma.user.findUnique({
 		where: { id: req.userId },
-		select: { id: true, email: true, name: true },
+		select: userSelect,
 	});
 	res.json({ user });
 });
