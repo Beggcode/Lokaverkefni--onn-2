@@ -2,8 +2,15 @@
   "name": "@ntv/shared",
   "version": "1.0.0",
   "type": "module",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --tsconfig tsconfig.json"
+  },
   "dependencies": {
     "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0"
   }
 }

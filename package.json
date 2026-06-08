@@ -2,6 +2,7 @@
   "name": "ntv",
   "private": true,
   "version": "1.0.0",
+  "packageManager": "pnpm@11.1.3",
   "workspaces": [
     "api",
     "client",
@@ -10,5 +11,8 @@
   "scripts": {
     "dev:api": "npm run dev --workspace=api",
     "dev:client": "npm run dev --workspace=client"
+  },
+  "devDependencies": {
+    "turbo": "^2.9.16"
   }
 }
