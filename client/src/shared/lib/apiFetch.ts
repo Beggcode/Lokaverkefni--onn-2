@@ -1,10 +1,12 @@
 import { z } from "zod";
 
+const BASE_URL = import.meta.env.VITE_API_URL ?? "";
+
 type ApiFetchInit = RequestInit & { json?: unknown };
 
 export async function apiFetch(path: string, init?: ApiFetchInit) {
 	const { json, ...rest } = init ?? {};
-	return fetch(path, {
+	return fetch(`${BASE_URL}${path}`, {
 		credentials: "include",
 		headers: { "Content-Type": "application/json", ...rest.headers },
 		...(json !== undefined && { body: JSON.stringify(json) }),
