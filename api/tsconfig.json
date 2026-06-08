@@ -6,11 +6,7 @@
     "strict": true,
     "esModuleInterop": true,
     "ignoreDeprecations": "6.0",
-    "rootDir": ".",
-    "outDir": "dist",
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "declaration": true
+    "skipLibCheck": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
