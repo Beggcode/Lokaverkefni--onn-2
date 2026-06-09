@@ -1,0 +1,5 @@
+[build]
+buildCommand = "pnpm install && pnpm run build"
+
+[deploy]
+startCommand = "node dist/index.js"
