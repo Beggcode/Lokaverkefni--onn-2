@@ -21,7 +21,8 @@ function setAuthCookie(res: Response, userId: number) {
 	const token = jwt.sign({ userId }, env.JWT_SECRET, { expiresIn: "7d" });
 	res.cookie("token", token, {
 		httpOnly: true,
-		sameSite: "lax",
+		sameSite: "none",
+		secure: true,
 		maxAge: SEVEN_DAYS_MS,
 	});
 }
@@ -61,7 +62,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", (_req, res) => {
-	res.clearCookie("token");
+	res.clearCookie("token", { sameSite: "none", secure: true });
 	res.json({ message: "ok" });
 });
 
