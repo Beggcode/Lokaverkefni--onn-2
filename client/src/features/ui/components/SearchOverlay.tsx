@@ -31,6 +31,7 @@ export default function SearchOverlay() {
 			<Dialog.Portal>
 				<Dialog.Overlay className={styles.overlay} />
 				<Dialog.Content className={styles.content}>
+					<Dialog.Title className={styles.srOnly}>Search</Dialog.Title>
 					<form onSubmit={handleSearch} className={styles.searchBar}>
 						<Search size={18} />
 						<input
